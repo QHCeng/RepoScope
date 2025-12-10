@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RepoScope - Intelligent Repository Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            height: calc(100vh - 40px);
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #fafafa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: #667eea;
+            color: white;
+        }
+
+        .message.assistant .message-avatar {
+            background: #764ba2;
+            color: white;
+        }
+
+        .message-content {
+            flex: 1;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+        }
+
+        .message.user .message-content {
+            background: #667eea;
+            color: white;
+        }
+
+        .message-content pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+
+        .message.user .message-content pre {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .input-area {
+            padding: 20px 30px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .project-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .project-item {
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .project-item:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .project-item.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .project-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .project-meta {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .chat-session-item {
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-session-item:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .chat-session-item.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .chat-session-info {
+            flex: 1;
+        }
+
+        .chat-session-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .chat-session-meta {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .chat-session-delete {
+            background: #ffebee;
+            color: #c62828;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 11px;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .chat-session-item:hover .chat-session-delete {
+            opacity: 1;
+        }
+
+        .chat-session-delete:hover {
+            background: #ffcdd2;
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .chat-tabs {
+            display: flex;
+            gap: 5px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .chat-tab {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 13px;
+            transition: all 0.3s;
+            position: relative;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .chat-tab.active {
+            background: white;
+            border-bottom-color: white;
+            border-color: #667eea;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .chat-tab:hover {
+            background: #f0f4ff;
+        }
+
+        .chat-tab-close {
+            margin-left: 8px;
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        .chat-tab-close:hover {
+            opacity: 1;
+            color: #f44336;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-indicator.connected {
+            background: #4caf50;
+        }
+
+        .status-indicator.disconnected {
+            background: #f44336;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .markdown-content {
+            line-height: 1.6;
+        }
+
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3 {
+            font-size: 14px;
+            font-weight: normal;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .markdown-content code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .markdown-content pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .markdown-content ul,
+        .markdown-content ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .markdown-content li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+                min-height: calc(100vh - 40px);
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                max-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="section-title">Repository Settings</div>
+            
+            <div class="form-group">
+                <label>Repository URL</label>
+                <input type="text" id="repoUrl" placeholder="https://github.com/owner/repo" />
+            </div>
+
+            <div class="form-group">
+                <label>Repository Type</label>
+                <select id="repoType">
+                    <option value="github">GitHub</option>
+                    <option value="gitlab">GitLab</option>
+                    <option value="bitbucket">Bitbucket</option>
+                    <option value="local">Local Path</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Access Token (Optional)</label>
+                <input type="password" id="accessToken" placeholder="For private repos" />
+            </div>
+
+            <div class="form-group">
+                <label>Model Provider</label>
+                <select id="modelProvider">
+                    <option value="openai" selected>OpenAI</option>
+                    <option value="google">Google</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Model</label>
+                <select id="model">
+                    <option value="">Default</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Language</label>
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="deepResearch" />
+                    <label for="deepResearch">Deep Research Mode</label>
+                </div>
+            </div>
+
+            <div class="section-title" style="margin-top: 30px;">Chat History</div>
+            <button class="new-chat-btn" onclick="createNewChat()">+ New Chat</button>
+            <div id="chatHistoryList" class="project-list" style="max-height: 500px;">
+                <div style="text-align: center; color: #666; padding: 20px; font-size: 12px;">
+                    No chat history yet
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span id="statusText">Connecting...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <h1>🔍 RepoScope</h1>
+                <p>Intelligent Repository Explorer - Ask questions about your codebase</p>
+            </div>
+
+            <div class="chat-tabs" id="chatTabs">
+                <!-- Chat tabs will be dynamically added here -->
+            </div>
+
+            <div class="chat-container">
+                <div class="messages" id="messages">
+                    <div class="message assistant">
+                        <div class="message-avatar">AI</div>
+                        <div class="message-content">
+                            <div class="markdown-content">
+                                Welcome to RepoScope! 👋<br><br>
+                                To get started:<br>
+                                1. Enter a repository URL in the sidebar<br>
+                                2. Select your preferred model and language<br>
+                                3. Start asking questions about the codebase<br><br>
+                                You can ask questions like:<br>
+                                • "What is the main purpose of this repository?"<br>
+                                • "How does the authentication work?"<br>
+                                • "Explain the data flow in this project"<br>
+                                • "Where is the API endpoint defined?"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-area">
+                    <div id="errorMessage" style="display: none;"></div>
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="messageInput" 
+                            placeholder="Ask a question about the repository..." 
+                            onkeypress="handleKeyPress(event)"
+                        />
+                        <button class="btn btn-primary" id="sendButton" onclick="sendMessage()">
+                            Send
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8001';
+        let conversationHistory = [];
+        let currentRepoUrl = '';
+        let currentRepoType = 'github';
+        let currentProvider = 'openai';
+        let currentModel = '';
+        let currentLanguage = 'en';
+        
+        // Chat session management
+        let chatSessions = [];
+        let currentChatId = null;
+        const STORAGE_KEY = 'reposcope_chat_sessions';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkConnection();
+            await loadModels();
+            loadChatSessions();
+            
+            // Only create a new chat if there are no existing sessions
+            if (chatSessions.length === 0) {
+                createNewChat();
+            } else {
+                // Load the most recent chat session
+                switchToChat(chatSessions[0].id);
+            }
+            
+            // Watch for repo URL changes
+            document.getElementById('repoUrl').addEventListener('change', (e) => {
+                currentRepoUrl = e.target.value;
+                updateCurrentChatRepo();
+            });
+
+            document.getElementById('repoType').addEventListener('change', (e) => {
+                currentRepoType = e.target.value;
+                updateCurrentChatRepo();
+            });
+
+            document.getElementById('modelProvider').addEventListener('change', async (e) => {
+                currentProvider = e.target.value;
+                await loadModels();
+                updateCurrentChatSettings();
+            });
+
+            document.getElementById('language').addEventListener('change', (e) => {
+                currentLanguage = e.target.value;
+                updateCurrentChatSettings();
+            });
+            
+            document.getElementById('model').addEventListener('change', (e) => {
+                currentModel = e.target.value;
+                updateCurrentChatSettings();
+            });
+        });
+
+        // Chat session management functions
+        function createNewChat() {
+            const chatId = 'chat_' + Date.now();
+            const repoUrl = document.getElementById('repoUrl').value || '';
+            const repoName = repoUrl.split('/').pop() || 'New Chat';
+            
+            const newSession = {
+                id: chatId,
+                title: repoName || 'New Chat',
+                repoUrl: repoUrl,
+                repoType: currentRepoType,
+                provider: currentProvider,
+                model: currentModel,
+                language: currentLanguage,
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+                messages: []
+            };
+            
+            chatSessions.push(newSession);
+            currentChatId = chatId;
+            
+            saveChatSessions();
+            renderChatTabs();
+            renderChatHistory();
+            switchToChat(chatId);
+        }
+
+        function switchToChat(chatId) {
+            currentChatId = chatId;
+            const session = chatSessions.find(s => s.id === chatId);
+            
+            if (session) {
+                // Update UI with session data
+                document.getElementById('repoUrl').value = session.repoUrl || '';
+                document.getElementById('repoType').value = session.repoType || 'github';
+                document.getElementById('modelProvider').value = session.provider || 'openai';
+                document.getElementById('model').value = session.model || '';
+                document.getElementById('language').value = session.language || 'en';
+                
+                currentRepoUrl = session.repoUrl || '';
+                currentRepoType = session.repoType || 'github';
+                currentProvider = session.provider || 'openai';
+                currentModel = session.model || '';
+                currentLanguage = session.language || 'en';
+                
+                // Restore messages
+                conversationHistory = session.messages || [];
+                renderMessages();
+                
+                // Update model dropdown (async, will set value after loading)
+                loadModels().then(() => {
+                    // Set model value after models are loaded
+                    if (session.model) {
+                        document.getElementById('model').value = session.model;
+                        currentModel = session.model;
+                    }
+                });
+            }
+            
+            renderChatTabs();
+            renderChatHistory();
+        }
+
+        function deleteChat(chatId, event) {
+            event.stopPropagation();
+            if (confirm('Are you sure you want to delete this chat?')) {
+                chatSessions = chatSessions.filter(s => s.id !== chatId);
+                
+                // Always save after deletion
+                saveChatSessions();
+                
+                if (currentChatId === chatId) {
+                    if (chatSessions.length > 0) {
+                        switchToChat(chatSessions[0].id);
+                    } else {
+                        // Only create new chat if no sessions remain
+                        createNewChat();
+                    }
+                } else {
+                    renderChatTabs();
+                    renderChatHistory();
+                }
+            }
+        }
+
+        function updateCurrentChatRepo() {
+            if (currentChatId) {
+                const session = chatSessions.find(s => s.id === currentChatId);
+                if (session) {
+                    session.repoUrl = currentRepoUrl;
+                    session.repoType = currentRepoType;
+                    const repoName = currentRepoUrl.split('/').pop() || 'New Chat';
+                    session.title = repoName;
+                    session.updatedAt = Date.now();
+                    saveChatSessions();
+                    renderChatTabs();
+                    renderChatHistory();
+                }
+            }
+        }
+
+        function updateCurrentChatSettings() {
+            if (currentChatId) {
+                const session = chatSessions.find(s => s.id === currentChatId);
+                if (session) {
+                    session.provider = currentProvider;
+                    session.model = currentModel;
+                    session.language = currentLanguage;
+                    session.updatedAt = Date.now();
+                    saveChatSessions();
+                }
+            }
+        }
+
+        function saveCurrentChatMessages() {
+            if (currentChatId) {
+                const session = chatSessions.find(s => s.id === currentChatId);
+                if (session) {
+                    session.messages = conversationHistory;
+                    session.updatedAt = Date.now();
+                    saveChatSessions();
+                    renderChatHistory();
+                }
+            }
+        }
+
+        function saveChatSessions() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(chatSessions));
+            } catch (e) {
+                console.error('Error saving chat sessions:', e);
+            }
+        }
+
+        function loadChatSessions() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    chatSessions = JSON.parse(saved);
+                    // Filter out empty "New Chat" sessions (no messages and title is "New Chat")
+                    chatSessions = chatSessions.filter(session => {
+                        const isEmpty = !session.messages || session.messages.length === 0;
+                        const isNewChat = session.title === 'New Chat' || session.title === '';
+                        return !(isEmpty && isNewChat);
+                    });
+                    // Sort by updatedAt descending
+                    chatSessions.sort((a, b) => b.updatedAt - a.updatedAt);
+                    // Save cleaned sessions back to localStorage
+                    if (chatSessions.length !== JSON.parse(saved).length) {
+                        saveChatSessions();
+                    }
+                }
+            } catch (e) {
+                console.error('Error loading chat sessions:', e);
+                chatSessions = [];
+            }
+        }
+
+        function renderChatTabs() {
+            const tabsContainer = document.getElementById('chatTabs');
+            tabsContainer.innerHTML = chatSessions.map(session => {
+                const isActive = session.id === currentChatId;
+                const title = session.title.length > 15 ? session.title.substring(0, 15) + '...' : session.title;
+                return `
+                    <div class="chat-tab ${isActive ? 'active' : ''}" onclick="switchToChat('${session.id}')">
+                        ${title}
+                        <span class="chat-tab-close" onclick="deleteChat('${session.id}', event)">×</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderChatHistory() {
+            const historyList = document.getElementById('chatHistoryList');
+            
+            if (chatSessions.length === 0) {
+                historyList.innerHTML = '<div style="text-align: center; color: #666; padding: 20px; font-size: 12px;">No chat history yet</div>';
+                return;
+            }
+            
+            historyList.innerHTML = chatSessions.map(session => {
+                const isActive = session.id === currentChatId;
+                const date = new Date(session.updatedAt);
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const messageCount = session.messages ? session.messages.length : 0;
+                
+                return `
+                    <div class="chat-session-item ${isActive ? 'active' : ''}" onclick="switchToChat('${session.id}')">
+                        <div class="chat-session-info">
+                            <div class="chat-session-title">${session.title}</div>
+                            <div class="chat-session-meta">${messageCount} messages • ${dateStr}</div>
+                        </div>
+                        <button class="chat-session-delete" onclick="deleteChat('${session.id}', event)">Delete</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderMessages() {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = '';
+            
+            if (conversationHistory.length === 0) {
+                // Show welcome message
+                messagesDiv.innerHTML = `
+                    <div class="message assistant">
+                        <div class="message-avatar">AI</div>
+                        <div class="message-content">
+                            <div class="markdown-content">
+                                Welcome to RepoScope! 👋<br><br>
+                                To get started:<br>
+                                1. Enter a repository URL in the sidebar<br>
+                                2. Select your preferred model and language<br>
+                                3. Start asking questions about the codebase<br><br>
+                                You can ask questions like:<br>
+                                • "What is the main purpose of this repository?"<br>
+                                • "How does the authentication work?"<br>
+                                • "Explain the data flow in this project"<br>
+                                • "Where is the API endpoint defined?"
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Render conversation history
+            conversationHistory.forEach(msg => {
+                if (msg.role === 'user' || msg.role === 'assistant') {
+                    addMessage(msg.role, msg.content);
+                }
+            });
+        }
+
+        async function checkConnection() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                if (data.status === 'healthy') {
+                    document.getElementById('statusIndicator').className = 'status-indicator connected';
+                    document.getElementById('statusText').textContent = 'Connected';
+                } else {
+                    throw new Error('Not healthy');
+                }
+            } catch (error) {
+                document.getElementById('statusIndicator').className = 'status-indicator disconnected';
+                document.getElementById('statusText').textContent = 'Disconnected';
+            }
+        }
+
+        async function loadModels() {
+            try {
+                const response = await fetch(`${API_BASE}/models/config`);
+                const data = await response.json();
+                
+                const modelSelect = document.getElementById('model');
+                modelSelect.innerHTML = '<option value="">Default</option>';
+                
+                const provider = data.providers.find(p => p.id === currentProvider);
+                if (provider) {
+                    provider.models.forEach(model => {
+                        const option = document.createElement('option');
+                        option.value = model.id;
+                        option.textContent = model.name;
+                        modelSelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading models:', error);
+            }
+        }
+
+        async function loadProcessedProjects() {
+            try {
+                const response = await fetch(`${API_BASE}/api/processed_projects`);
+                const projects = await response.json();
+                
+                const projectList = document.getElementById('projectList');
+                
+                if (projects.length === 0) {
+                    projectList.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No processed projects yet</div>';
+                    return;
+                }
+
+                projectList.innerHTML = projects.map(project => `
+                    <div class="project-item" onclick="selectProject('${project.name}', '${project.repo_type}', '${project.owner}', '${project.repo}')">
+                        <div class="project-name">${project.name}</div>
+                        <div class="project-meta">${project.repo_type} • ${project.language}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                document.getElementById('projectList').innerHTML = 
+                    '<div style="text-align: center; color: #f44336; padding: 20px;">Error loading projects</div>';
+            }
+        }
+
+        function selectProject(name, type, owner, repo) {
+            // Determine repo URL based on type
+            let repoUrl = '';
+            if (type === 'github') {
+                repoUrl = `https://github.com/${owner}/${repo}`;
+            } else if (type === 'gitlab') {
+                repoUrl = `https://gitlab.com/${owner}/${repo}`;
+            } else if (type === 'bitbucket') {
+                repoUrl = `https://bitbucket.org/${owner}/${repo}`;
+            }
+
+            document.getElementById('repoUrl').value = repoUrl;
+            document.getElementById('repoType').value = type;
+            currentRepoUrl = repoUrl;
+            currentRepoType = type;
+            
+            // Update current chat session
+            updateCurrentChatRepo();
+
+            // Highlight selected project
+            document.querySelectorAll('.project-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Validate repo URL
+            currentRepoUrl = document.getElementById('repoUrl').value.trim();
+            if (!currentRepoUrl) {
+                showError('Please enter a repository URL first');
+                return;
+            }
+
+            // Add user message to UI
+            addMessage('user', message);
+            input.value = '';
+            
+            // Disable input
+            const sendButton = document.getElementById('sendButton');
+            sendButton.disabled = true;
+            sendButton.textContent = 'Sending...';
+
+            // Add assistant message placeholder
+            const assistantMessageId = addMessage('assistant', '');
+            const assistantElement = document.getElementById(`msg-${assistantMessageId}`);
+
+            try {
+                // Prepare request
+                const messages = conversationHistory.map(msg => ({
+                    role: msg.role,
+                    content: msg.content
+                }));
+                
+                // Add current message
+                let queryContent = message;
+                const deepResearch = document.getElementById('deepResearch').checked;
+                if (deepResearch) {
+                    queryContent = `[DEEP RESEARCH] ${message}`;
+                }
+                
+                messages.push({
+                    role: 'user',
+                    content: queryContent
+                });
+
+                const requestBody = {
+                    repo_url: currentRepoUrl,
+                    messages: messages,
+                    provider: currentProvider,
+                    model: document.getElementById('model').value || null,
+                    type: currentRepoType,
+                    language: currentLanguage,
+                    token: document.getElementById('accessToken').value || null
+                };
+
+                // Make streaming request
+                const response = await fetch(`${API_BASE}/chat/completions/stream`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Request failed');
+                }
+
+                // Read stream
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullResponse = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value, { stream: true });
+                    fullResponse += chunk;
+                    
+                    // Update UI with markdown rendering
+                    const contentDiv = assistantElement.querySelector('.message-content');
+                    contentDiv.innerHTML = `<div class="markdown-content">${renderMarkdown(fullResponse)}</div>`;
+                    
+                    // Auto scroll
+                    contentDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }
+
+                // Update conversation history
+                conversationHistory.push({ role: 'user', content: message });
+                conversationHistory.push({ role: 'assistant', content: fullResponse });
+
+                // Save to current chat session
+                saveCurrentChatMessages();
+                
+                // Update chat title if it's the first message
+                if (currentChatId) {
+                    const session = chatSessions.find(s => s.id === currentChatId);
+                    if (session && session.messages.length === 2) {
+                        // First message, update title based on first user message
+                        const firstUserMsg = message.substring(0, 30);
+                        session.title = firstUserMsg.length < message.length ? firstUserMsg + '...' : firstUserMsg;
+                        saveChatSessions();
+                        renderChatTabs();
+                        renderChatHistory();
+                    }
+                }
+
+                hideError();
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError(`Error: ${error.message}`);
+                assistantElement.querySelector('.message-content').textContent = 
+                    `Sorry, I encountered an error: ${error.message}`;
+            } finally {
+                sendButton.disabled = false;
+                sendButton.textContent = 'Send';
+            }
+        }
+
+        function addMessage(role, content) {
+            const messagesDiv = document.getElementById('messages');
+            const messageId = Date.now();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            messageDiv.id = `msg-${messageId}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = role === 'user' ? 'You' : 'AI';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            if (content) {
+                if (role === 'assistant') {
+                    contentDiv.innerHTML = `<div class="markdown-content">${renderMarkdown(content)}</div>`;
+                } else {
+                    contentDiv.textContent = content;
+                }
+            } else {
+                contentDiv.innerHTML = '<div class="loading"></div>';
+            }
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            messagesDiv.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            return messageId;
+        }
+
+        function renderMarkdown(text) {
+            // Simple markdown rendering
+            // First handle code blocks to avoid interfering with headers inside code
+            let result = text
+                .replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>');
+            
+            // Convert markdown headers to plain text (process in order: ###, ##, #)
+            // Must do this BEFORE replacing \n with <br>, otherwise ^ won't match line start
+            result = result
+                .replace(/^### (.+)$/gm, '$1')
+                .replace(/^## (.+)$/gm, '$1')
+                .replace(/^# (.+)$/gm, '$1');
+            
+            // Then handle other markdown features
+            result = result
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+            
+            return result;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function hideError() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
+

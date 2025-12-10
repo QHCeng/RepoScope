@@ -1,0 +1,30 @@
+# Core web framework
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# RAG and ML dependencies
+adalflow>=1.1.0
+openai>=2.0.0
+tiktoken>=0.5.0
+requests>=2.31.0
+
+# Development dependencies
+watchfiles>=0.21.0
+
+# Additional dependencies
+numpy>=1.24.0
+
+# FAISS installation (choose one method):
+# Option 1: Using conda (recommended for macOS, especially Apple Silicon)
+#   conda install -c pytorch faiss-cpu
+#   OR
+#   conda install -c conda-forge faiss-cpu
+#
+# Option 2: Using pip (may require compilation, can be problematic on macOS)
+#   pip install faiss-cpu
+#
+# Option 3: If you have CUDA GPU
+#   conda install -c pytorch faiss-gpu
+
