@@ -33,16 +33,18 @@ if is_development:
     def patched_watch(*args, **kwargs):
         # Only watch the api directory but exclude logs subdirectory
         # Instead of watching the entire api directory, watch specific subdirectories
-        api_subdirs = []
+        api_paths = []
+        
+        # Add the api directory itself (watchfiles will handle .py files)
+        api_paths.append(current_dir)
+        
+        # Add subdirectories (excluding logs)
         for item in os.listdir(current_dir):
             item_path = os.path.join(current_dir, item)
             if os.path.isdir(item_path) and item != "logs":
-                api_subdirs.append(item_path)
+                api_paths.append(item_path)
 
-        # Also add Python files in the api root directory
-        api_subdirs.append(current_dir + "/*.py")
-
-        return original_watch(*api_subdirs, **kwargs)
+        return original_watch(*api_paths, **kwargs)
 
 
     watchfiles.watch = patched_watch
