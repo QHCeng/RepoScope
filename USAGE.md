@@ -19,7 +19,7 @@ conda create -n reposcope python=3.9 -y
 conda activate reposcope
 
 # 安装依赖
-pip install fastapi uvicorn python-dotenv adalflow transformers tiktoken requests
+pip install fastapi uvicorn python-dotenv adalflow transformers tiktoken requests openai watchfiles
 conda install -c conda-forge faiss-cpu -y
 ```
 
