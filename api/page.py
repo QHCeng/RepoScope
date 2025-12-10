@@ -59,6 +59,7 @@ class RepoInfo(BaseModel):
     token: Optional[str] = None
     localPath: Optional[str] = None
     repoUrl: Optional[str] = None
+    default_branch: Optional[str] = None  # Default branch for the repository
 
 
 class WikiSection(BaseModel):
@@ -225,13 +226,13 @@ class RepoFetcher:
 
     # ---------- GitLab ----------
     def _fetch_gitlab(self) -> tuple[str, str]:
-        if not self.repo.repo_url:
+        if not self.repo.repoUrl:
             raise ValueError("GitLab repo_url is required")
 
         # Extract GitLab base url and project path
         from urllib.parse import urlparse
 
-        u = urlparse(self.repo.repo_url)
+        u = urlparse(self.repo.repoUrl)
         base = f"{u.scheme}://{u.netloc}"
         project_path = u.path.lstrip("/").rstrip(".git")
         project_id = requests.utils.quote(project_path, safe="")
@@ -278,12 +279,12 @@ class RepoFetcher:
 
     # ---------- Bitbucket ----------
     def _fetch_bitbucket(self) -> tuple[str, str]:
-        if not self.repo.repo_url:
+        if not self.repo.repoUrl:
             raise ValueError("Bitbucket repo_url is required")
 
         from urllib.parse import urlparse
 
-        u = urlparse(self.repo.repo_url)
+        u = urlparse(self.repo.repoUrl)
         base = f"{u.scheme}://{u.netloc}"
         repo_path = u.path.lstrip("/")
 
@@ -404,9 +405,9 @@ class WikiService:
             WikiPage(
                 id=p["id"],
                 title=p["title"],
-                file_paths=p["file_paths"],
+                filePaths=p.get("filePaths", p.get("file_paths", [])),  # Support both camelCase and snake_case
                 importance=p["importance"],
-                related_pages=p.get("related_pages", []),
+                relatedPages=p.get("relatedPages", p.get("related_pages", [])),  # Support both camelCase and snake_case
                 content=p.get("content", ""),
             )
             for p in data["wiki_structure"]["pages"]
@@ -434,15 +435,15 @@ class WikiService:
     def save_cache(self, wiki: WikiStructureModel):
         p = self._cache_key()
         serializable = {
-            "repo": dataclasses.asdict(self.repo),
+            "repo": self.repo.model_dump() if hasattr(self.repo, 'model_dump') else self.repo.dict(),
             "language": self.language,
             "comprehensive": self.comprehensive,
             "wiki_structure": {
                 "id": wiki.id,
                 "title": wiki.title,
                 "description": wiki.description,
-                "pages": [dataclasses.asdict(page) for page in wiki.pages],
-                "sections": [dataclasses.asdict(sec) for sec in wiki.sections],
+                "pages": [page.model_dump() if hasattr(page, 'model_dump') else page.dict() for page in wiki.pages],
+                "sections": [sec.model_dump() if hasattr(sec, 'model_dump') else sec.dict() for sec in wiki.sections] if wiki.sections else [],
                 "root_sections": wiki.root_sections,
             },
         }
@@ -552,9 +553,10 @@ class WikiService:
                     WikiPage(
                         id=pid,
                         title=p_title,
-                        file_paths=file_paths,
+                        content="",  # Content will be generated later
+                        filePaths=file_paths,  # Use camelCase to match model
                         importance=importance,  # type: ignore
-                        related_pages=related,
+                        relatedPages=related,  # Use camelCase to match model
                     )
                 )
 
@@ -570,10 +572,12 @@ class WikiService:
 
     # ---------- Page content ----------
     def generate_page_content(self, page: WikiPage) -> str:
+        from api.data_pipeline import get_file_content
+        
         def generate_file_url(path: str) -> str:
-            if self.repo.type == "local" or not self.repo.repo_url:
+            if self.repo.type == "local" or not self.repo.repoUrl:
                 return path
-            base = self.repo.repo_url.rstrip("/")
+            base = self.repo.repoUrl.rstrip("/")
             if self.repo.type == "github":
                 return f"{base}/blob/{self.repo.default_branch}/{path}"
             elif self.repo.type == "gitlab":
@@ -582,9 +586,34 @@ class WikiService:
                 return f"{base}/src/{self.repo.default_branch}/{path}"
             return path
 
-        file_links = "\n".join(
-            f"- [{p}]({generate_file_url(p)})" for p in page.file_paths
-        ) or "- (no files provided)"
+        # Fetch actual file contents
+        file_contents = []
+        file_links = []
+        for file_path in page.filePaths:
+            try:
+                if self.repo.type == "local":
+                    # For local repos, read from file system
+                    local_path = Path(self.repo.localPath or self.repo.repoUrl) / file_path
+                    if local_path.exists():
+                        content = local_path.read_text(encoding='utf-8', errors='ignore')
+                        file_contents.append(f"=== File: {file_path} ===\n{content}\n")
+                else:
+                    # For remote repos, fetch via API
+                    content = get_file_content(
+                        self.repo.repoUrl,
+                        file_path,
+                        self.repo.type,
+                        self.repo.token
+                    )
+                    file_contents.append(f"=== File: {file_path} ===\n{content}\n")
+                file_links.append(f"- [{file_path}]({generate_file_url(file_path)})")
+            except Exception as e:
+                # If file fetch fails, just include the link
+                print(f"[deepwiki] Warning: Could not fetch file {file_path}: {e}")
+                file_links.append(f"- [{file_path}]({generate_file_url(file_path)})")
+
+        file_content_text = "\n".join(file_contents) if file_contents else "No file content available."
+        file_links_text = "\n".join(file_links) if file_links else "- (no files provided)"
 
         lang_label = self._language_label()
 
@@ -595,17 +624,25 @@ class WikiService:
         [WIKI_PAGE_TOPIC]
         {page.title}
 
-        Use ONLY the following source files as ground truth:
+        Below are the ACTUAL source files and their content. Use ONLY this content as ground truth:
+
         [RELEVANT_SOURCE_FILES]
-        {file_links}
+        {file_content_text}
+
+        [FILE_LINKS]
+        {file_links_text}
 
         The wiki MUST start with a <details> block listing all files used, then '# {page.title}'.
 
         Requirements:
-        - Use Mermaid diagrams (graph TD / sequenceDiagram) when appropriate.
-        - Use tables for API, configs, data models.
-        - Ground all statements in the provided files (do not hallucinate external knowledge).
+        - Analyze the ACTUAL code content provided above. Do NOT make up or hallucinate information.
+        - Extract real APIs, functions, classes, and data structures from the actual code.
+        - Use Mermaid diagrams (graph TD / sequenceDiagram) when appropriate, based on actual code structure.
+        - Use tables for API endpoints, configs, data models - but ONLY include information that actually exists in the code.
+        - If a table column is empty or not applicable, omit that column or use "N/A".
+        - Ground ALL statements in the provided files (do not hallucinate external knowledge).
         - Language: {lang_label}.
+        - Be accurate and specific. If the code doesn't show something, don't include it.
 
         Return ONLY valid Markdown (no extra explanations).
         """).strip()
@@ -665,7 +702,7 @@ class WikiService:
         data = {
             "title": wiki.title,
             "description": wiki.description,
-            "pages": [dataclasses.asdict(p) for p in wiki.pages],
+            "pages": [p.model_dump() if hasattr(p, 'model_dump') else p.dict() for p in wiki.pages],
         }
         Path(out_path).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"[deepwiki] Exported JSON to {out_path}")

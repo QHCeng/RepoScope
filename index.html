@@ -562,6 +562,16 @@
                 </div>
             </div>
 
+            <div class="form-group" style="margin-top: 20px;">
+                <button class="new-chat-btn" id="generateWikiBtn" onclick="generateWiki()" style="background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);">
+                    📘 Generate Wiki
+                </button>
+                <div class="checkbox-group" style="margin-top: 10px;">
+                    <input type="checkbox" id="forceRegenerate" />
+                    <label for="forceRegenerate" style="font-size: 12px;">Force regenerate (ignore cache)</label>
+                </div>
+            </div>
+
             <div class="section-title" style="margin-top: 30px;">Chat History</div>
             <button class="new-chat-btn" onclick="createNewChat()">+ New Chat</button>
             <div id="chatHistoryList" class="project-list" style="max-height: 500px;">
@@ -1170,6 +1180,108 @@
             return messageId;
         }
 
+        async function generateWiki() {
+            const repoUrl = document.getElementById('repoUrl').value.trim();
+            if (!repoUrl) {
+                showError('Please enter a repository URL first');
+                return;
+            }
+
+            const generateBtn = document.getElementById('generateWikiBtn');
+            const originalText = generateBtn.textContent;
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+
+            try {
+                const requestBody = {
+                    repo_url: repoUrl,
+                    repo_type: document.getElementById('repoType').value,
+                    token: document.getElementById('accessToken').value || null,
+                    provider: currentProvider,
+                    model: document.getElementById('model').value || null,
+                    language: currentLanguage,
+                    comprehensive: true,
+                    use_cache: true,
+                    force_regenerate: document.getElementById('forceRegenerate').checked
+                };
+
+                // Show loading message with progress updates
+                const messagesDiv = document.getElementById('messages');
+                const loadingMsgId = addMessage('assistant', '');
+                const loadingMsg = document.getElementById(`msg-${loadingMsgId}`);
+                const loadingContent = loadingMsg.querySelector('.message-content');
+                
+                // Update loading message with progress
+                const updateLoadingMessage = (message) => {
+                    loadingContent.innerHTML = `<div class="markdown-content">${message}</div>`;
+                };
+                
+                updateLoadingMessage('🔄 Starting wiki generation...<br>📥 Fetching repository structure...');
+
+                const response = await fetch(`${API_BASE}/api/wiki/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'Failed to generate wiki');
+                }
+
+                updateLoadingMessage('🤖 Analyzing repository structure...<br>📝 Generating wiki pages...<br>⏳ This may take a few minutes, please wait...');
+
+                const result = await response.json();
+
+                // Remove loading message
+                if (loadingMsg) {
+                    loadingMsg.remove();
+                }
+
+                // Display wiki structure
+                const wiki = result.wiki_structure;
+                let wikiContent = `# ${wiki.title}\n\n${wiki.description}\n\n`;
+                wikiContent += `## Wiki Structure\n\n`;
+                wikiContent += `Generated ${wiki.pages.length} pages:\n\n`;
+
+                wiki.pages.forEach((page, index) => {
+                    wikiContent += `${index + 1}. **${page.title}** (${page.importance} importance)\n`;
+                    if (page.filePaths && page.filePaths.length > 0) {
+                        wikiContent += `   - Files: ${page.filePaths.slice(0, 3).join(', ')}${page.filePaths.length > 3 ? '...' : ''}\n`;
+                    }
+                });
+
+                wikiContent += `\n\n## Generated Pages\n\n`;
+                
+                // Add ALL pages content (not just preview)
+                for (const page of wiki.pages) {
+                    if (result.generated_pages[page.id] && result.generated_pages[page.id].content) {
+                        wikiContent += `### ${page.title}\n\n`;
+                        wikiContent += result.generated_pages[page.id].content;
+                        wikiContent += `\n\n---\n\n`;
+                    }
+                }
+
+                addMessage('assistant', wikiContent);
+                
+                // Show message indicating if from cache
+                if (result.from_cache) {
+                    showSuccess('Wiki loaded from cache. Check "Force regenerate" to generate a new one.');
+                } else {
+                    showSuccess('Wiki generated successfully!');
+                }
+
+            } catch (error) {
+                console.error('Error generating wiki:', error);
+                showError(`Error: ${error.message}`);
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = originalText;
+            }
+        }
+
         function renderMarkdown(text) {
             // Simple markdown rendering
             // First handle code blocks to avoid interfering with headers inside code
@@ -1201,7 +1313,29 @@
         }
 
         function hideError() {
-            document.getElementById('errorMessage').style.display = 'none';
+            const errorDiv = document.getElementById('errorMessage');
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        function showSuccess(message) {
+            // Create or update success message
+            let successDiv = document.getElementById('successMessage');
+            if (!successDiv) {
+                successDiv = document.createElement('div');
+                successDiv.id = 'successMessage';
+                successDiv.className = 'success-message';
+                const messagesDiv = document.getElementById('messages');
+                messagesDiv.insertBefore(successDiv, messagesDiv.firstChild);
+            }
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            // Hide after 5 seconds
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 5000);
         }
     </script>
 </body>

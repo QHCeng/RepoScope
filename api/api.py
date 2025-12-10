@@ -63,6 +63,7 @@ class RepoInfo(BaseModel):
     token: Optional[str] = None
     localPath: Optional[str] = None
     repoUrl: Optional[str] = None
+    default_branch: Optional[str] = None  # Added for WikiService compatibility
 
 
 class WikiSection(BaseModel):
@@ -116,6 +117,20 @@ class WikiExportRequest(BaseModel):
     pages: List[WikiPage] = Field(..., description="List of wiki pages to export")
     format: Literal["markdown", "json"] = Field(..., description="Export format (markdown or json)")
 
+class WikiGenerateRequest(BaseModel):
+    """
+    Model for requesting wiki generation.
+    """
+    repo_url: str = Field(..., description="URL of the repository")
+    repo_type: str = Field("github", description="Type of repository (github, gitlab, bitbucket, local)")
+    token: Optional[str] = Field(None, description="Access token for private repositories")
+    provider: str = Field("openai", description="Model provider (openai, google)")
+    model: Optional[str] = Field(None, description="Model name (e.g., gpt-4o-mini, gemini-2.0-flash-exp)")
+    language: str = Field("en", description="Language for wiki generation (en, zh, ja, etc.)")
+    comprehensive: bool = Field(True, description="Whether to generate comprehensive wiki (8-12 pages) or concise (4-6 pages)")
+    use_cache: bool = Field(True, description="Whether to use cached wiki if available")
+    force_regenerate: bool = Field(False, description="Force regenerate wiki even if cache exists")
+
 # --- Model Configuration Models ---
 class Model(BaseModel):
     """
@@ -143,7 +158,7 @@ class ModelConfig(BaseModel):
 class AuthorizationConfig(BaseModel):
     code: str = Field(..., description="Authorization code")
 
-from api.config import configs, WIKI_AUTH_MODE, WIKI_AUTH_CODE
+from api.config import configs, WIKI_AUTH_MODE, WIKI_AUTH_CODE, OPENAI_API_KEY, GOOGLE_API_KEY
 
 @app.get("/lang/config")
 async def get_lang_config():
@@ -222,6 +237,154 @@ async def get_model_config():
             ],
             defaultProvider="google"
         )
+
+@app.post("/api/wiki/generate")
+async def generate_wiki(request: WikiGenerateRequest):
+    """
+    Generate wiki documentation for a repository.
+    
+    Args:
+        request: Wiki generation request containing repository info and model settings
+        
+    Returns:
+        Generated wiki structure and pages
+    """
+    try:
+        from urllib.parse import urlparse
+        from api.page import WikiService, RepoInfo, LLMClient
+        from api.config import get_model_config
+        import os
+        
+        logger.info(f"Generating wiki for {request.repo_url} using {request.provider}/{request.model}")
+        
+        # Parse repository URL to extract owner and repo
+        if request.repo_type == "local":
+            # For local paths, use the path as repo name
+            owner = "local"
+            repo = request.repo_url.split("/")[-1] or "repository"
+        else:
+            # Parse URL to extract owner and repo
+            url_parts = request.repo_url.rstrip('/').split('/')
+            if len(url_parts) < 2:
+                raise HTTPException(status_code=400, detail="Invalid repository URL format")
+            
+            # For GitHub/GitLab/Bitbucket URLs like https://github.com/owner/repo
+            # url_parts will be: ['https:', '', 'github.com', 'owner', 'repo']
+            if len(url_parts) >= 5:
+                owner = url_parts[-2]
+                repo = url_parts[-1].replace(".git", "")
+            elif len(url_parts) >= 2:
+                # Fallback for shorter URLs
+                owner = url_parts[-2] if len(url_parts) >= 2 else "unknown"
+                repo = url_parts[-1].replace(".git", "") if url_parts else "unknown"
+            else:
+                raise HTTPException(status_code=400, detail="Invalid repository URL format")
+        
+        # Create RepoInfo
+        repo_info = RepoInfo(
+            owner=owner,
+            repo=repo,
+            type=request.repo_type,
+            token=request.token,
+            repoUrl=request.repo_url
+        )
+        
+        # Get model configuration
+        model_config = get_model_config(request.provider, request.model)
+        if not model_config:
+            raise HTTPException(status_code=400, detail=f"Invalid provider or model: {request.provider}/{request.model}")
+        
+        # Create LLMClient based on provider
+        if request.provider == "openai":
+            api_key = OPENAI_API_KEY or os.getenv("OPENAI_API_KEY")
+            if not api_key:
+                raise HTTPException(status_code=400, detail="OPENAI_API_KEY is not set")
+            model_name = request.model or model_config.get("default_model", "gpt-4o-mini")
+            llm = LLMClient(model=model_name, api_key=api_key)
+        elif request.provider == "google":
+            # For Google, we need to use a different approach
+            # Since LLMClient only supports OpenAI, we'll need to extend it or use adalflow
+            import google.generativeai as genai
+            
+            api_key = GOOGLE_API_KEY or os.getenv("GOOGLE_API_KEY")
+            if not api_key:
+                raise HTTPException(status_code=400, detail="GOOGLE_API_KEY is not set")
+            
+            genai.configure(api_key=api_key)
+            model_name = request.model or model_config.get("default_model", "gemini-2.0-flash-exp")
+            
+            # Create a wrapper that works with WikiService
+            class GoogleLLMClient:
+                def __init__(self, model: str, api_key: str):
+                    self.model = model
+                    self.api_key = api_key
+                    genai.configure(api_key=api_key)
+                
+                def chat(self, messages: List[Dict[str, str]], **kwargs) -> str:
+                    model = genai.GenerativeModel(self.model)
+                    # Convert messages format
+                    prompt = ""
+                    for msg in messages:
+                        if msg["role"] == "user":
+                            prompt += msg["content"] + "\n\n"
+                    
+                    response = model.generate_content(prompt)
+                    return response.text
+            
+            llm = GoogleLLMClient(model=model_name, api_key=api_key)
+        else:
+            raise HTTPException(status_code=400, detail=f"Unsupported provider: {request.provider}")
+        
+        # Create WikiService
+        wiki_service = WikiService(
+            repo=repo_info,
+            llm=llm,
+            language=request.language,
+            comprehensive=request.comprehensive
+        )
+        
+        # Generate wiki - use cache unless force_regenerate is True
+        use_cache = request.use_cache and not request.force_regenerate
+        cache_key_path = wiki_service._cache_key()
+        is_from_cache = use_cache and cache_key_path.exists()
+        wiki = wiki_service.generate_wiki(use_cache=use_cache)
+        
+        # Convert to response format - wiki.pages already contains content
+        generated_pages = {page.id: page for page in wiki.pages}
+        
+        # Save to cache - use model_validate for Pydantic v2 compatibility
+        try:
+            cache_request_dict = {
+                "repo": repo_info.model_dump() if hasattr(repo_info, 'model_dump') else repo_info.dict(),
+                "language": request.language,
+                "wiki_structure": wiki.model_dump() if hasattr(wiki, 'model_dump') else wiki.dict(),
+                "generated_pages": {k: (v.model_dump() if hasattr(v, 'model_dump') else v.dict()) for k, v in generated_pages.items()},
+                "provider": request.provider,
+                "model": request.model or model_config.get("default_model", "")
+            }
+            cache_request = WikiCacheRequest.model_validate(cache_request_dict)
+            await save_wiki_cache(cache_request)
+        except Exception as cache_error:
+            logger.warning(f"Failed to save wiki cache: {cache_error}. Continuing without cache.")
+        
+        # Return wiki structure and generated pages as dictionary
+        # Convert to dict format for Pydantic v2 compatibility
+        return {
+            "wiki_structure": wiki.model_dump() if hasattr(wiki, 'model_dump') else wiki.dict(),
+            "generated_pages": {k: (v.model_dump() if hasattr(v, 'model_dump') else v.dict()) for k, v in generated_pages.items()},
+            "repo_url": request.repo_url,
+            "repo": repo_info.model_dump() if hasattr(repo_info, 'model_dump') else repo_info.dict(),
+            "provider": request.provider,
+            "model": request.model or model_config.get("default_model", ""),
+            "message": "Wiki generated successfully",
+            "from_cache": is_from_cache
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating wiki: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating wiki: {str(e)}")
 
 @app.post("/export/wiki")
 async def export_wiki(request: WikiExportRequest):

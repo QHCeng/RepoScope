@@ -1,0 +1,128 @@
+{
+  "repo": {
+    "owner": "QHCeng",
+    "repo": "RepoScope",
+    "type": "github",
+    "token": null,
+    "localPath": null,
+    "repoUrl": "https://github.com/QHCeng/RepoScope/",
+    "default_branch": "main"
+  },
+  "language": "zh",
+  "comprehensive": true,
+  "wiki_structure": {
+    "id": "wiki",
+    "title": "RepoScope 中文维基",
+    "description": "RepoScope 是一个智能的 GitHub 仓库浏览器，自动生成结构化的维基风格文档网站，并支持基于仓库源代码的自然语言对话。",
+    "pages": [
+      {
+        "id": "page-1",
+        "title": "项目概述",
+        "content": "<details>\n<summary>使用的文件列表</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n\n</details>\n\n# 项目概述\n\n## 项目名称\n\n**RepoScope**\n\n## 项目简介\n\nRepoScope 是一个智能的 GitHub 仓库浏览器，能够自动生成结构化的 **Wiki 风格文档网站**，并支持基于仓库源代码的 **自然语言对话**。通过结合静态分析、基于嵌入的检索和 LLM 驱动的总结/对话，RepoScope 提供了一种交互式方式来理解大型、陌生的代码库。\n\n## 主要功能\n\n### 📘 自动 Wiki 文档生成\n\nRepoScope 分析整个 GitHub 仓库并生成完整的 Wiki 风格文档树，包括：\n\n- 仓库概述\n- 模块级文档\n- 类、函数和 API 摘要\n- 文件逐个解释\n- 架构和依赖关系图（如果启用）\n\n生成的 Wiki 旨在为开发人员提供一个清晰、可读和可导航的知识库。\n\n### 💬 代码感知对话界面\n\nRepoScope 支持基于仓库实际源代码的自然语言对话：\n\n- 提问如“数据加载器如何工作？”\n- 查询系统设计决策\n- 定位函数/实现\n- 特定模块或模式的总结\n- 调试解释或“此处使用在哪里？”的查询\n\n对话引擎使用向量嵌入和 LLM 推理来提供上下文准确的答案。\n\n### 🔍 仓库解析与索引\n\nRepoScope 对仓库进行静态分析：\n\n- 读取所有源文件（Python、JS/TS、Go、Rust 等）\n- 提取符号级单元（类、函数、方法）\n- 构建用于语义搜索的嵌入\n- 生成代码库的结构化知识图\n- 生成机器可读的中间表示\n\n此索引为 Wiki 生成和对话功能提供支持。\n\n## 工作原理\n\n1. 克隆或加载 GitHub 仓库\n2. 解析并索引文件、符号和目录结构\n3. 生成用于语义理解和检索的嵌入\n4. 使用 AI 生成的文档填充 Wiki 模板\n5. 提供由代码索引支持的对话界面\n6. 使用检索增强生成回答用户问题\n\n## 快速开始\n\n### 1. 安装依赖\n\n```bash\npip install -r requirements.txt\n```\n\n### 2. 设置环境变量\n\n创建一个 `.env` 文件：\n\n```env\nOPENAI_API_KEY=your_openai_api_key\nGOOGLE_API_KEY=your_google_api_key\nPORT=8001\n```\n\n### 3. 启动服务器\n\n```bash\npython -m api.main\n```\n\n### 4. 打开 Web 界面\n\n在浏览器中导航到 **http://localhost:8001** 以访问交互式 Web 界面。\n\nWeb 界面提供：\n- 🎨 现代、直观的用户界面\n- 💬 与代码库的实时聊天\n- 📊 项目历史和管理\n- ⚙️ 模型和语言配置\n- 🔍 深度研究模式用于全面分析\n\n有关详细的使用说明，请参阅 [USAGE.md](USAGE.md)。",
+        "filePaths": [
+          "README.md"
+        ],
+        "importance": "high",
+        "relatedPages": [
+          "page-2",
+          "page-3"
+        ]
+      },
+      {
+        "id": "page-2",
+        "title": "自动化维基文档生成",
+        "content": "<details>\n<summary>使用的文件列表</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n\n</details>\n\n# 自动化维基文档生成\n\n## 简介\n\nRepoScope 是一个智能的 GitHub 仓库浏览器，能够自动生成结构化的 **Wiki 风格文档网站**，并支持基于仓库源代码的 **自然语言对话**。它通过结合静态分析、基于嵌入的检索和 LLM 驱动的总结/对话，为理解大型、陌生的代码库提供了一种交互式的方法。\n\n## 🚀 功能\n\n### 📘 1. 自动化维基文档生成\n\nRepoScope 分析整个 GitHub 仓库并生成完整的 Wiki 风格文档树，包括：\n\n- 仓库概览\n- 模块级文档\n- 类、函数和 API 摘要\n- 文件逐个解释\n- 架构和依赖关系图（如果启用）\n\n生成的 Wiki 旨在为开发人员提供一个干净、可读和可导航的知识库。\n\n### 💬 2. 代码感知对话接口\n\nRepoScope 支持基于仓库实际源代码的自然语言对话：\n\n- 提问如“数据加载器如何工作？”\n- 查询系统设计决策\n- 定位函数/实现\n- 特定模块或模式的总结\n- 调试解释或“此处使用在哪里？”查询\n\n对话引擎使用向量嵌入和 LLM 推理来提供上下文准确的答案。\n\n### 🔍 3. 仓库解析和索引\n\nRepoScope 对仓库进行静态分析：\n\n- 读取所有源文件（Python、JS/TS、Go、Rust 等）\n- 提取符号级单元（类、函数、方法）\n- 构建用于语义搜索的嵌入\n- 生成代码库的结构化知识图\n- 生成机器可读的中间表示\n\n此索引为 Wiki 生成和对话功能提供支持。\n\n## 🧠 工作原理\n\n1. 克隆或加载 GitHub 仓库\n2. 解析和索引文件、符号和目录结构\n3. 生成用于语义理解和检索的嵌入\n4. 使用 AI 生成的文档填充 Wiki 模板\n5. 提供由代码索引支持的对话接口\n6. 使用检索增强生成回答用户问题\n\n## 🚀 快速开始\n\n### 1. 安装依赖\n\n```bash\npip install -r requirements.txt\n```\n\n### 2. 设置环境变量\n\n创建 `.env` 文件：\n\n```env\nOPENAI_API_KEY=your_openai_api_key\nGOOGLE_API_KEY=your_google_api_key\nPORT=8001\n```\n\n### 3. 启动服务器\n\n```bash\npython -m api.main\n```\n\n### 4. 打开网页界面\n\n在浏览器中访问 **http://localhost:8001** 以访问交互式网页界面。\n\n网页界面提供：\n- 🎨 现代、直观的 UI\n- 💬 与代码库的实时聊天\n- 📊 项目历史和管理\n- ⚙️ 模型和语言配置\n- 🔍 深度研究模式以进行全面分析\n\n有关详细的使用说明，请参见 [USAGE.md](USAGE.md)。",
+        "filePaths": [
+          "README.md"
+        ],
+        "importance": "high",
+        "relatedPages": [
+          "page-1",
+          "page-4"
+        ]
+      },
+      {
+        "id": "page-3",
+        "title": "代码感知对话界面",
+        "content": "<details>\n<summary>使用的文件列表</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n\n</details>\n\n# 代码感知对话界面\n\n## 简介\n\nRepoScope 是一个智能的 GitHub 仓库浏览器，它自动生成结构化的 **Wiki 风格文档网站**，并启用基于仓库源代码的 **自然语言对话**。通过结合静态分析、基于嵌入的检索和 LLM 驱动的摘要/对话，提供了一种交互式的方式来理解大型、陌生的代码库。\n\n## 功能\n\n### 自动 Wiki 文档生成\n\nRepoScope 分析整个 GitHub 仓库，并生成完整的 Wiki 风格文档树，包括：\n\n- 仓库概览\n- 模块级文档\n- 类、函数和 API 摘要\n- 文件逐个解释\n- 架构和依赖关系图（如果启用）\n\n生成的 Wiki 旨在为开发人员提供一个干净、可读和可导航的知识库。\n\n### 代码感知对话界面\n\nRepoScope 启用基于仓库实际源代码的自然语言对话：\n\n- 提问如“数据加载器如何工作？”\n- 查询系统设计决策\n- 定位函数/实现\n- 特定模块或模式的摘要\n- 调试解释或“此处使用在哪里？”查找\n\n对话引擎使用向量嵌入和 LLM 推理来提供上下文准确的答案。\n\n### 仓库解析和索引\n\nRepoScope 对仓库进行静态分析：\n\n- 读取所有源文件（Python、JS/TS、Go、Rust 等）\n- 提取符号级单元（类、函数、方法）\n- 构建用于语义搜索的嵌入\n- 生成代码库的结构化知识图\n- 生成机器可读的中间表示\n\n此索引为 Wiki 生成和对话功能提供支持。\n\n## 工作原理\n\n1. 克隆或加载 GitHub 仓库\n2. 解析和索引文件、符号和目录结构\n3. 生成用于语义理解和检索的嵌入\n4. 使用 AI 生成的文档填充 Wiki 模板\n5. 提供由代码索引支持的对话界面\n6. 使用检索增强生成回答用户问题\n\n## 快速开始\n\n### 安装依赖\n\n```bash\npip install -r requirements.txt\n```\n\n### 设置环境变量\n\n创建一个 `.env` 文件：\n\n```env\nOPENAI_API_KEY=your_openai_api_key\nGOOGLE_API_KEY=your_google_api_key\nPORT=8001\n```\n\n### 启动服务器\n\n```bash\npython -m api.main\n```\n\n### 打开 Web 界面\n\n在浏览器中导航到 **http://localhost:8001** 以访问交互式 Web 界面。\n\nWeb 界面提供：\n- 🎨 现代、直观的 UI\n- 💬 与代码库的实时聊天\n- 📊 项目历史和管理\n- ⚙️ 模型和语言配置\n- 🔍 深度研究模式用于全面分析",
+        "filePaths": [
+          "README.md"
+        ],
+        "importance": "high",
+        "relatedPages": [
+          "page-1",
+          "page-5"
+        ]
+      },
+      {
+        "id": "page-4",
+        "title": "仓库解析与索引",
+        "content": "<details>\n<summary>使用的文件列表</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n\n</details>\n\n# 仓库解析与索引\n\n## 简介\n\nRepoScope 是一个智能的 GitHub 仓库探索工具，能够自动生成结构化的 **Wiki 风格文档网站**，并支持基于仓库源代码的 **自然语言对话**。通过结合静态分析、基于嵌入的检索和 LLM 驱动的总结/对话，RepoScope 提供了一种交互式方式来理解大型且不熟悉的代码库。\n\n## 功能概述\n\n### 自动 Wiki 文档生成\n\nRepoScope 分析整个 GitHub 仓库并生成完整的 Wiki 风格文档树，包括：\n\n- 仓库概览\n- 模块级文档\n- 类、函数和 API 摘要\n- 文件逐个解释\n- 架构和依赖关系图（如果启用）\n\n生成的 Wiki 旨在为开发人员提供一个干净、可读和可导航的知识库。\n\n### 代码感知对话接口\n\nRepoScope 支持基于仓库实际源代码的自然语言对话：\n\n- 提问如“数据加载器如何工作？”\n- 查询系统设计决策\n- 定位函数/实现\n- 特定模块或模式的总结\n- 调试解释或“此处使用在哪里？”查找\n\n对话引擎使用向量嵌入和 LLM 推理来提供上下文准确的答案。\n\n### 仓库解析与索引\n\nRepoScope 对仓库执行静态分析：\n\n- 读取所有源文件（Python、JS/TS、Go、Rust 等）\n- 提取符号级单元（类、函数、方法）\n- 构建用于语义搜索的嵌入\n- 生成代码库的结构化知识图\n- 生成机器可读的中间表示\n\n此索引为 Wiki 生成和对话功能提供支持。\n\n## 工作原理\n\n1. 克隆或加载 GitHub 仓库\n2. 解析和索引文件、符号和目录结构\n3. 生成用于语义理解和检索的嵌入\n4. 使用 AI 生成的文档填充 Wiki 模板\n5. 提供由代码索引支持的对话接口\n6. 使用检索增强生成回答用户问题\n\n## 快速开始\n\n### 安装依赖\n\n```bash\npip install -r requirements.txt\n```\n\n### 设置环境变量\n\n创建一个 `.env` 文件：\n\n```env\nOPENAI_API_KEY=your_openai_api_key\nGOOGLE_API_KEY=your_google_api_key\nPORT=8001\n```\n\n### 启动服务器\n\n```bash\npython -m api.main\n```\n\n### 打开 Web 界面\n\n在浏览器中导航到 **http://localhost:8001** 以访问交互式 Web 界面。\n\nWeb 界面提供：\n- 🎨 现代、直观的用户界面\n- 💬 与代码库的实时聊天\n- 📊 项目历史和管理\n- ⚙️ 模型和语言配置\n- 🔍 深度研究模式进行全面分析",
+        "filePaths": [
+          "README.md"
+        ],
+        "importance": "medium",
+        "relatedPages": [
+          "page-2",
+          "page-6"
+        ]
+      },
+      {
+        "id": "page-5",
+        "title": "快速开始指南",
+        "content": "<details>\n<summary>使用的文件列表</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n- [requirements.txt](https://github.com/QHCeng/RepoScope/blob/main/requirements.txt)\n\n</details>\n\n# 快速开始指南\n\n## 介绍\n\nRepoScope 是一个智能的 GitHub 仓库浏览器，它能够自动生成结构化的 **Wiki 风格文档网站**，并支持基于仓库源代码的 **自然语言对话**。通过结合静态分析、基于嵌入的检索和 LLM 驱动的总结/对话，RepoScope 提供了一种交互式方式来理解大型且不熟悉的代码库。\n\n## 🚀 快速开始\n\n### 1. 安装依赖\n\n在项目根目录下运行以下命令安装所需的 Python 包：\n\n```bash\npip install -r requirements.txt\n```\n\n### 2. 设置环境变量\n\n创建一个 `.env` 文件，并添加以下内容：\n\n```env\nOPENAI_API_KEY=your_openai_api_key\nGOOGLE_API_KEY=your_google_api_key\nPORT=8001\n```\n\n### 3. 启动服务器\n\n运行以下命令启动服务器：\n\n```bash\npython -m api.main\n```\n\n### 4. 打开网页界面\n\n在浏览器中访问 **http://localhost:8001** 以访问交互式网页界面。\n\n网页界面提供：\n- 🎨 现代直观的用户界面\n- 💬 与代码库的实时聊天\n- 📊 项目历史和管理\n- ⚙️ 模型和语言配置\n- 🔍 深度研究模式以进行全面分析\n\n## 系统架构\n\nRepoScope 的工作流程如下：\n\n```mermaid\ngraph TD;\n    A[克隆或加载 GitHub 仓库] --> B[解析和索引文件、符号及目录结构];\n    B --> C[生成语义理解和检索的嵌入];\n    C --> D[使用 AI 生成文档填充 Wiki 模板];\n    D --> E[提供由代码索引支持的对话界面];\n    E --> F[使用检索增强生成回答用户问题];\n```\n\n## 依赖项\n\n以下是 `requirements.txt` 中列出的核心依赖项：\n\n| 依赖项          | 版本要求       |\n|-----------------|---------------|\n| fastapi         | >=0.104.0     |\n| uvicorn[standard] | >=0.24.0     |\n| python-dotenv   | >=1.0.0       |\n| pydantic        | >=2.0.0       |\n| adalflow        | >=1.1.0       |\n| openai          | >=2.0.0       |\n| tiktoken        | >=0.5.0       |\n| requests        | >=2.31.0      |\n| watchfiles      | >=0.21.0      |\n| numpy           | >=1.24.0      |\n\n### FAISS 安装选项\n\n- **选项 1**: 使用 conda（推荐用于 macOS，尤其是 Apple Silicon）\n  - `conda install -c pytorch faiss-cpu`\n  - 或\n  - `conda install -c conda-forge faiss-cpu`\n\n- **选项 2**: 使用 pip（可能需要编译，在 macOS 上可能有问题）\n  - `pip install faiss-cpu`\n\n- **选项 3**: 如果您有 CUDA GPU\n  - `conda install -c pytorch faiss-gpu`",
+        "filePaths": [
+          "README.md",
+          "requirements.txt"
+        ],
+        "importance": "high",
+        "relatedPages": [
+          "page-3",
+          "page-7"
+        ]
+      },
+      {
+        "id": "page-6",
+        "title": "API 模块概览",
+        "content": "<details>\n<summary>文件列表</summary>\n\n- [api/api.py](https://github.com/QHCeng/RepoScope/blob/main/api/api.py)\n- [api/main.py](https://github.com/QHCeng/RepoScope/blob/main/api/main.py)\n\n</details>\n\n# API 模块概览\n\n## 概述\n\n该文档概述了一个基于 FastAPI 的流媒体 API 模块，主要用于处理 Wiki 页面和模型配置的管理。该模块支持多种功能，包括 Wiki 页面导出、缓存管理、模型配置获取等。\n\n## FastAPI 应用初始化\n\n```python\napp = FastAPI(\n    title=\"Streaming API\",\n    description=\"API for streaming chat completions\"\n)\n```\n\n### 中间件配置\n\n- **CORS 中间件**: 允许所有来源、方法和头部。\n\n```python\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"*\"],\n    allow_credentials=True,\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n```\n\n## 数据模型\n\n### WikiPage\n\n```python\nclass WikiPage(BaseModel):\n    id: str\n    title: str\n    content: str\n    filePaths: List[str]\n    importance: str\n    relatedPages: List[str]\n```\n\n### ProcessedProjectEntry\n\n```python\nclass ProcessedProjectEntry(BaseModel):\n    id: str\n    owner: str\n    repo: str\n    name: str\n    repo_type: str\n    submittedAt: int\n    language: str\n```\n\n### ModelConfig\n\n```python\nclass ModelConfig(BaseModel):\n    providers: List[Provider]\n    defaultProvider: str\n```\n\n## API 端点\n\n| 方法 | 路径 | 描述 |\n|------|------|------|\n| GET | `/lang/config` | 获取语言配置 |\n| GET | `/auth/status` | 检查是否需要认证 |\n| POST | `/auth/validate` | 验证授权码 |\n| GET | `/models/config` | 获取模型配置 |\n| POST | `/export/wiki` | 导出 Wiki 内容为 Markdown 或 JSON |\n| GET | `/local_repo/structure` | 获取本地仓库的文件结构和 README 内容 |\n| GET | `/api/wiki_cache` | 获取缓存的 Wiki 数据 |\n| POST | `/api/wiki_cache` | 存储生成的 Wiki 数据到缓存 |\n| DELETE | `/api/wiki_cache` | 删除特定的 Wiki 缓存 |\n| GET | `/health` | 健康检查端点 |\n| GET | `/` | 根端点，列出可用的 API 端点 |\n| GET | `/api/processed_projects` | 列出所有已处理的项目 |\n\n## 主要功能流程\n\n### Wiki 导出流程\n\n```mermaid\nsequenceDiagram\n    participant Client\n    participant API\n    Client->>API: POST /export/wiki\n    API->>API: 生成 Markdown 或 JSON 内容\n    API-->>Client: 返回文件下载响应\n```\n\n### 模型配置获取流程\n\n```mermaid\nsequenceDiagram\n    participant Client\n    participant API\n    Client->>API: GET /models/config\n    API->>API: 获取模型提供者和模型列表\n    API-->>Client: 返回 ModelConfig 对象\n```\n\n## 日志配置\n\n日志配置在 `api/logging_config.py` 中进行设置，确保所有操作均有日志记录以便于调试和监控。\n\n## 环境变量\n\n- `OPENAI_API_KEY`: 必须的环境变量，用于某些功能的正常运行。\n- `PORT`: 服务器运行的端口，默认为 8001。\n\n## 运行说明\n\n在开发环境中，使用 `uvicorn` 启动应用程序，并启用文件监控以便于热重载。\n\n```bash\nuvicorn api.api:app --host 0.0.0.0 --port 8001 --reload\n```",
+        "filePaths": [
+          "api/api.py",
+          "api/main.py"
+        ],
+        "importance": "medium",
+        "relatedPages": [
+          "page-4",
+          "page-8"
+        ]
+      },
+      {
+        "id": "page-7",
+        "title": "训练模块",
+        "content": "<details>\n<summary>使用的文件列表</summary>\n\n- [train/train_lora.py](https://github.com/QHCeng/RepoScope/blob/main/train/train_lora.py)\n- [train/train_rlhf.py](https://github.com/QHCeng/RepoScope/blob/main/train/train_rlhf.py)\n\n</details>\n\n# 训练模块\n\n本页面介绍了用于训练模型的两个主要模块：`train_lora.py` 和 `train_rlhf.py`。这两个模块分别实现了基于 LoRA 和 DPO 的训练过程。\n\n## 概述\n\n### train_lora.py\n\n`train_lora.py` 文件实现了一个基于 LoRA（Low-Rank Adaptation）的模型训练过程。主要使用了以下库和工具：\n\n- **Transformers**: 用于加载和处理预训练模型和分词器。\n- **Datasets**: 用于加载和处理数据集。\n- **TRL (Transformers Reinforcement Learning)**: 提供了 `SFTTrainer` 用于训练。\n\n#### 主要类和函数\n\n- **TrainConfig**: 数据类，包含训练的配置参数。\n- **build_chat_prompt**: 函数，用于构建训练数据的提示格式。\n- **main**: 主函数，负责加载数据集、初始化模型和训练。\n\n#### 训练流程\n\n```mermaid\nsequenceDiagram\n    participant U as 用户\n    participant S as 系统\n    U->>S: 加载数据集\n    S->>S: 初始化分词器\n    S->>S: 加载基础模型\n    S->>S: 配置LoRA\n    S->>S: 初始化SFTTrainer\n    S->>S: 开始训练\n    S->>S: 保存LoRA适配器\n```\n\n### train_rlhf.py\n\n`train_rlhf.py` 文件实现了基于 DPO（Direct Preference Optimization）的训练过程。主要使用了以下库和工具：\n\n- **Transformers**: 用于加载和处理预训练模型和分词器。\n- **Datasets**: 用于加载和处理数据集。\n- **TRL (Transformers Reinforcement Learning)**: 提供了 `DPOTrainer` 用于训练。\n\n#### 主要类和函数\n\n- **DPOConfig**: 数据类，包含DPO训练的配置参数。\n- **build_dpo_example**: 函数，用于构建DPO训练数据的格式。\n- **main**: 主函数，负责加载数据集、初始化模型和训练。\n\n#### 训练流程\n\n```mermaid\nsequenceDiagram\n    participant U as 用户\n    participant S as 系统\n    U->>S: 加载DPO数据集\n    S->>S: 初始化分词器\n    S->>S: 加载策略模型\n    S->>S: 加载参考模型\n    S->>S: 准备TrainingArguments\n    S->>S: 初始化DPOTrainer\n    S->>S: 开始DPO训练\n    S->>S: 保存DPO调整后的模型\n```\n\n## 配置参数\n\n### TrainConfig (train_lora.py)\n\n| 参数名                      | 默认值                          | 描述                       |\n|-----------------------------|--------------------------------|----------------------------|\n| model_name                  | mistralai/Mistral-7B-Instruct-v0.2 | 模型名称或路径             |\n| train_file                  | train_wiki.jsonl               | 训练数据文件               |\n| val_file                    | None                           | 验证数据文件               |\n| output_dir                  | ./lora-wiki-mistral            | 输出目录                   |\n| max_seq_length              | 4096                           | 最大序列长度               |\n| micro_batch_size            | 1                              | 微批次大小                 |\n| gradient_accumulation_steps | 8                              | 梯度累积步数               |\n| num_train_epochs            | 3                              | 训练轮数                   |\n| learning_rate               | 2e-4                           | 学习率                     |\n| weight_decay                | 0.0                            | 权重衰减                   |\n| warmup_ratio                | 0.03                           | 预热比例                   |\n| lora_r                      | 8                              | LoRA参数r                  |\n| lora_alpha                  | 16                             | LoRA参数alpha              |\n| lora_dropout                | 0.05                           | LoRA dropout               |\n| lora_target_modules         | (\"q_proj\", \"k_proj\", ...)      | 目标模块                   |\n| use_4bit                    | True                           | 是否使用4bit量化           |\n\n### DPOConfig (train_rlhf.py)\n\n| 参数名                      | 默认值                          | 描述                       |\n|-----------------------------|--------------------------------|----------------------------|\n| model_name_or_path          | mistralai/Mistral-7B-Instruct-v0.2 | 策略模型名称或路径         |\n| ref_model_name_or_path      | mistralai/Mistral-7B-Instruct-v0.2 | 参考模型名称或路径         |\n| train_file                  | dpo_wiki_pairs.jsonl           | 训练数据文件               |\n| val_file                    | None                           | 验证数据文件               |\n| output_dir                  | ./dpo-wiki-mistral             | 输出目录                   |\n| max_prompt_length           | 2048                           | 最大提示长度               |\n| max_target_length           | 2048                           | 最大目标长度               |\n| use_4bit                    | True                           | 是否使用4bit量化           |\n| per_device_train_batch_size | 2                              | 每设备训练批次大小         |\n| per_device_eval_batch_size  | 2                              | 每设备验证批次大小         |\n| gradient_accumulation_steps | 4                              | 梯度累积步数               |\n| num_train_epochs            | 3                              | 训练轮数                   |\n| learning_rate               | 1e-5                           | 学习率                     |\n| warmup_ratio                | 0.03                           | 预热比例                   |\n| weight_decay                | 0.0                            | 权重衰减                   |\n| logging_steps               | 10                             | 日志记录步数               |\n| save_strategy               | epoch                          | 保存策略                   |\n| eval_strategy               | no                             | 验证策略                   |\n| bf16                        | True                           | 是否使用bf16               |\n| seed                        | 42                             | 随机种子                   |\n| beta                        | 0.1                            | DPO参数beta                |\n\n以上信息基于提供的源代码文件内容，准确描述了训练模块的实现细节和配置参数。",
+        "filePaths": [
+          "train/train_lora.py",
+          "train/train_rlhf.py"
+        ],
+        "importance": "medium",
+        "relatedPages": [
+          "page-5"
+        ]
+      },
+      {
+        "id": "page-8",
+        "title": "日志与配置",
+        "content": "<details>\n<summary>使用的文件列表</summary>\n\n- [api/logging_config.py](https://github.com/QHCeng/RepoScope/blob/main/api/logging_config.py)\n\n</details>\n\n# 日志与配置\n\n本页面描述了日志与配置的实现细节，基于提供的 `api/logging_config.py` 文件。\n\n## 类与函数\n\n### IgnoreLogChangeDetectedFilter\n\n```python\nclass IgnoreLogChangeDetectedFilter(logging.Filter):\n    def filter(self, record: logging.LogRecord):\n        return \"Detected file change in\" not in record.getMessage()\n```\n\n- **描述**: 该过滤器用于忽略包含 \"Detected file change in\" 消息的日志记录。\n\n### setup_logging\n\n```python\ndef setup_logging(format: str = None):\n    \"\"\"\n    配置应用程序的日志记录，支持日志轮转。\n\n    环境变量:\n        LOG_LEVEL: 日志级别 (默认: INFO)\n        LOG_FILE_PATH: 日志文件路径 (默认: logs/application.log)\n        LOG_MAX_SIZE: 日志轮转的最大大小 (默认: 10MB)\n        LOG_BACKUP_COUNT: 保留的备份文件数量 (默认: 5)\n\n    确保日志目录存在，防止路径遍历，并配置文件轮转和控制台处理器。\n    \"\"\"\n```\n\n- **描述**: 配置应用程序的日志记录，支持日志轮转。\n- **参数**:\n  - `format`: 日志格式字符串，默认为 `\"%(asctime)s - %(levelname)s - %(name)s - %(filename)s:%(lineno)d - %(message)s\"`。\n- **环境变量**:\n  - `LOG_LEVEL`: 设置日志级别，默认值为 `INFO`。\n  - `LOG_FILE_PATH`: 设置日志文件路径，默认值为 `logs/application.log`。\n  - `LOG_MAX_SIZE`: 设置日志文件的最大大小（以MB为单位），默认值为 `10MB`。\n  - `LOG_BACKUP_COUNT`: 设置保留的日志备份文件数量，默认值为 `5`。\n\n## 日志配置流程\n\n```mermaid\ngraph TD;\n    A[开始] --> B[获取日志目录和默认文件路径]\n    B --> C[获取日志级别]\n    C --> D[获取日志文件路径并验证安全性]\n    D --> E[获取最大日志文件大小]\n    E --> F[获取备份文件数量]\n    F --> G[创建文件和控制台处理器]\n    G --> H[设置处理器格式]\n    H --> I[添加过滤器]\n    I --> J[应用日志配置]\n    J --> K[记录日志配置信息]\n    K --> L[结束]\n```\n\n## 处理器与过滤器\n\n- **文件处理器**: 使用 `RotatingFileHandler`，支持日志文件轮转。\n- **控制台处理器**: 使用 `StreamHandler`，输出日志到控制台。\n- **过滤器**: `IgnoreLogChangeDetectedFilter`，用于忽略特定的日志消息。\n\n## 环境变量配置\n\n| 环境变量          | 描述                             | 默认值                |\n|-------------------|----------------------------------|-----------------------|\n| `LOG_LEVEL`       | 日志级别                         | `INFO`                |\n| `LOG_FILE_PATH`   | 日志文件路径                     | `logs/application.log`|\n| `LOG_MAX_SIZE`    | 日志文件的最大大小（MB）         | `10`                  |\n| `LOG_BACKUP_COUNT`| 保留的日志备份文件数量           | `5`                   |\n\n通过以上配置，应用程序能够有效地管理日志记录，确保日志文件不会无限增长，并且能够在控制台和文件中输出日志信息。",
+        "filePaths": [
+          "api/logging_config.py",
+          "api/logs/application.log"
+        ],
+        "importance": "low",
+        "relatedPages": [
+          "page-6"
+        ]
+      }
+    ],
+    "sections": [],
+    "root_sections": []
+  }
+}

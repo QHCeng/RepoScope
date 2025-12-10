@@ -1,0 +1,131 @@
+{
+  "repo": {
+    "owner": "QHCeng",
+    "repo": "RepoScope",
+    "type": "github",
+    "token": null,
+    "localPath": null,
+    "repoUrl": "https://github.com/QHCeng/RepoScope/",
+    "default_branch": "main"
+  },
+  "language": "ja",
+  "comprehensive": true,
+  "wiki_structure": {
+    "id": "wiki",
+    "title": "RepoScopeのWikiドキュメント",
+    "description": "RepoScopeは、GitHubリポジトリをインテリジェントに探索し、Wikiスタイルのドキュメントを自動生成するツールです。",
+    "pages": [
+      {
+        "id": "page-1",
+        "title": "リポジトリ概要",
+        "content": "<details>\n<summary>使用されたファイル一覧</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n\n</details>\n\n# リポジトリ概要\n\n## RepoScope\n\nRepoScopeは、GitHubリポジトリをインテリジェントに探索し、構造化された**Wikiスタイルのドキュメントサイト**を自動生成し、リポジトリのソースコードに基づいた**自然言語での会話**を可能にするツールです。静的解析、埋め込みベースの検索、およびLLMによる要約/対話を組み合わせることで、大規模で不慣れなコードベースを理解するためのインタラクティブな方法を提供します。\n\n## 🚀 特徴\n\n### 📘 1. 自動Wikiドキュメント生成\n\nRepoScopeは、GitHubリポジトリ全体を分析し、完全なWikiスタイルのドキュメントツリーを生成します。これには以下が含まれます：\n\n- リポジトリ概要\n- モジュールレベルのドキュメント\n- クラス、関数、APIの概要\n- ファイルごとの説明\n- アーキテクチャおよび依存関係の図（有効化されている場合）\n\n生成されたWikiは、開発者にとってクリーンで読みやすく、ナビゲートしやすい知識ベースを提供することを目的としています。\n\n### 💬 2. コード対応の会話インターフェース\n\nRepoScopeは、リポジトリの実際のソースコードに基づいた自然言語での会話を可能にします：\n\n- *「データローダーはどのように動作しますか？」* のような質問をする\n- システム設計の決定を問い合わせる\n- 関数/実装を見つける\n- 特定のモジュールやパターンの要約\n- デバッグの説明や「これはどこで使われていますか？」の検索\n\n会話エンジンは、ベクトル埋め込みとLLMの推論を使用して、文脈に即した正確な回答を提供します。\n\n### 🔍 3. リポジトリの解析とインデックス作成\n\nRepoScopeはリポジトリに対して静的解析を行います：\n\n- すべてのソースファイル（Python、JS/TS、Go、Rustなど）を読み取る\n- シンボルレベルの単位（クラス、関数、メソッド）を抽出する\n- セマンティック検索のための埋め込みを構築する\n- コードベースの構造化された知識グラフを生成する\n- 機械可読な中間表現を生成する\n\nこのインデックスは、Wiki生成と会話機能の両方を支えています。\n\n## 🧠 動作の仕組み\n\n1. GitHubリポジトリをクローンまたはロードする\n2. ファイル、シンボル、ディレクトリ構造を解析およびインデックス化する\n3. セマンティックな理解と検索のための埋め込みを生成する\n4. AI生成のドキュメントでWikiテンプレートを埋める\n5. コードインデックスに基づいた会話インターフェースを提供する\n6. 検索強化生成を使用してユーザーの質問に回答する\n\n## 🚀 クイックスタート\n\n### 1. 依存関係のインストール\n\n```bash\npip install -r requirements.txt\n```\n\n### 2. 環境変数の設定\n\n`.env`ファイルを作成：\n\n```env\nOPENAI_API_KEY=your_openai_api_key\nGOOGLE_API_KEY=your_google_api_key\nPORT=8001\n```\n\n### 3. サーバーの起動\n\n```bash\npython -m api.main\n```\n\n### 4. Webインターフェースを開く\n\nブラウザで **http://localhost:8001** にアクセスして、インタラクティブなWebインターフェースにアクセスします。\n\nWebインターフェースでは以下を提供します：\n- 🎨 モダンで直感的なUI\n- 💬 コードベースとのリアルタイムチャット\n- 📊 プロジェクト履歴と管理\n- ⚙️ モデルと言語の設定\n- 🔍 包括的な分析のためのディープリサーチモード\n\n詳細な使用方法については、[USAGE.md](USAGE.md)を参照してください。",
+        "filePaths": [
+          "README.md"
+        ],
+        "importance": "high",
+        "relatedPages": [
+          "page-2",
+          "page-3"
+        ]
+      },
+      {
+        "id": "page-2",
+        "title": "自動Wikiドキュメント生成",
+        "content": "<details>\n<summary>使用ファイル一覧</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n\n</details>\n\n# 自動Wikiドキュメント生成\n\n## 概要\n\nRepoScopeは、GitHubリポジトリをインテリジェントに探索し、構造化された**Wikiスタイルのドキュメントウェブサイト**を自動生成するツールです。また、リポジトリのソースコードに基づいた**自然言語での会話**を可能にします。静的解析、埋め込みベースの検索、LLMによる要約・対話を組み合わせることで、大規模で未知のコードベースをインタラクティブに理解する方法を提供します。\n\n## 特徴\n\n### 📘 自動Wikiドキュメント生成\n\nRepoScopeはGitHubリポジトリ全体を分析し、以下を含む完全なWikiスタイルのドキュメントツリーを生成します：\n\n- リポジトリの概要\n- モジュールレベルのドキュメント\n- クラス、関数、APIの要約\n- ファイルごとの説明\n- アーキテクチャと依存関係の図（有効化されている場合）\n\n生成されたWikiは、開発者にとってクリーンで読みやすく、ナビゲートしやすい知識ベースを提供することを目的としています。\n\n### 💬 コード対応の会話インターフェース\n\nRepoScopeはリポジトリの実際のソースコードに基づいた自然言語での会話を可能にします：\n\n- 「データローダーはどのように動作しますか？」のような質問\n- システム設計の決定に関するクエリ\n- 関数や実装の場所を特定\n- 特定のモジュールやパターンの要約\n- デバッグの説明や「これはどこで使われていますか？」の検索\n\n会話エンジンはベクトル埋め込みとLLMの推論を使用して、文脈に応じた正確な回答を提供します。\n\n### 🔍 リポジトリの解析とインデックス化\n\nRepoScopeはリポジトリに対して静的解析を行います：\n\n- すべてのソースファイル（Python、JS/TS、Go、Rustなど）を読み込み\n- シンボルレベルの単位（クラス、関数、メソッド）を抽出\n- セマンティック検索のための埋め込みを構築\n- コードベースの構造化された知識グラフを生成\n- 機械可読の中間表現を生成\n\nこのインデックスは、Wiki生成と会話機能の両方を支えています。\n\n## 動作の仕組み\n\n1. GitHubリポジトリをクローンまたはロード\n2. ファイル、シンボル、ディレクトリ構造を解析・インデックス化\n3. セマンティックな理解と検索のための埋め込みを生成\n4. AI生成のドキュメントでWikiテンプレートを埋める\n5. コードインデックスに基づいた会話インターフェースを提供\n6. 検索強化生成を使用してユーザーの質問に回答\n\n## クイックスタート\n\n### 1. 依存関係のインストール\n\n```bash\npip install -r requirements.txt\n```\n\n### 2. 環境変数の設定\n\n`.env`ファイルを作成：\n\n```env\nOPENAI_API_KEY=your_openai_api_key\nGOOGLE_API_KEY=your_google_api_key\nPORT=8001\n```\n\n### 3. サーバーの起動\n\n```bash\npython -m api.main\n```\n\n### 4. Webインターフェースのオープン\n\nブラウザで**http://localhost:8001**にアクセスして、インタラクティブなWebインターフェースを利用します。\n\nWebインターフェースには以下が含まれます：\n- 🎨 モダンで直感的なUI\n- 💬 コードベースとのリアルタイムチャット\n- 📊 プロジェクト履歴と管理\n- ⚙️ モデルと言語の設定\n- 🔍 包括的な分析のためのディープリサーチモード\n\n詳細な使用方法については、[USAGE.md](USAGE.md)を参照してください。",
+        "filePaths": [
+          "README.md"
+        ],
+        "importance": "high",
+        "relatedPages": [
+          "page-1",
+          "page-4"
+        ]
+      },
+      {
+        "id": "page-3",
+        "title": "コード対応型会話インターフェース",
+        "content": "<details>\n<summary>使用したファイル一覧</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n- [api/simple_chat.py](https://github.com/QHCeng/RepoScope/blob/main/api/simple_chat.py)\n\n</details>\n\n# コード対応型会話インターフェース\n\n## 概要\n\nコード対応型会話インターフェースは、RepoScopeの一部として提供される機能で、リポジトリのソースコードに基づいた自然言語での会話を可能にします。このインターフェースは、リポジトリの解析、インデックス作成、埋め込みベースの検索、LLM（大規模言語モデル）による推論を組み合わせて、ユーザーの質問に対して文脈に応じた正確な回答を提供します。\n\n## 主な機能\n\n- ソースコードに基づいた質問応答\n- システム設計の決定に関するクエリ\n- 関数や実装の特定\n- 特定のモジュールやパターンの要約\n- デバッグの説明や「どこで使用されているか」の検索\n\n## API エンドポイント\n\n以下は、`api/simple_chat.py`で定義されているAPIエンドポイントです。\n\n| エンドポイント | メソッド | 説明 |\n|---------------|----------|------|\n| `/chat/completions/stream` | POST | リポジトリのソースコードに基づいたチャットのストリーミング応答を提供します。 |\n| `/` | GET | APIが稼働中であることを確認するためのルートエンドポイントです。 |\n\n## データモデル\n\n`api/simple_chat.py`で使用されるデータモデルは以下の通りです。\n\n### ChatMessage\n\n- `role`: `str` - 'user' または 'assistant'\n- `content`: `str` - メッセージの内容\n\n### ChatCompletionRequest\n\n- `repo_url`: `str` - クエリ対象のリポジトリのURL\n- `messages`: `List[ChatMessage]` - チャットメッセージのリスト\n- `filePath`: `Optional[str]` - プロンプトに含めるリポジトリ内のファイルのパス\n- `token`: `Optional[str]` - プライベートリポジトリ用の個人アクセストークン\n- `type`: `Optional[str]` - リポジトリの種類（例: 'github', 'gitlab', 'bitbucket'）\n- `provider`: `str` - モデルプロバイダー（例: 'google', 'openai'）\n- `model`: `Optional[str]` - 指定されたプロバイダーのモデル名\n- `language`: `Optional[str]` - コンテンツ生成の言語（例: 'en', 'ja'）\n- `excluded_dirs`: `Optional[str]` - 処理から除外するディレクトリのカンマ区切りリスト\n- `excluded_files`: `Optional[str]` - 処理から除外するファイルパターンのカンマ区切りリスト\n- `included_dirs`: `Optional[str]` - 処理に含めるディレクトリのカンマ区切りリスト\n- `included_files`: `Optional[str]` - 処理に含めるファイルパターンのカンマ区切りリスト\n\n## シーケンス図\n\n以下は、`/chat/completions/stream`エンドポイントの処理フローを示すシーケンス図です。\n\n```mermaid\nsequenceDiagram\n    participant U as User\n    participant A as API\n    participant R as RAG\n    participant M as Model\n\n    U->>A: POST /chat/completions/stream\n    A->>R: Prepare retriever\n    R-->>A: Retriever ready\n    A->>M: Generate response\n    M-->>A: Response stream\n    A-->>U: Streamed response\n```\n\n## ロギング\n\n`api/simple_chat.py`では、`logging`モジュールを使用して、APIの動作やエラーを記録しています。`setup_logging()`関数でロギングの設定が行われています。\n\n## 注意事項\n\n- このインターフェースは、リポジトリのサイズや構造に依存するため、初回の処理には時間がかかる場合があります。\n- プライベートリポジトリを使用する場合は、適切なアクセス権限を持つトークンが必要です。",
+        "filePaths": [
+          "README.md",
+          "api/simple_chat.py"
+        ],
+        "importance": "high",
+        "relatedPages": [
+          "page-1",
+          "page-5"
+        ]
+      },
+      {
+        "id": "page-4",
+        "title": "リポジトリ解析とインデックス作成",
+        "content": "<details>\n<summary>使用したファイル一覧</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n- [api/data_pipeline.py](https://github.com/QHCeng/RepoScope/blob/main/api/data_pipeline.py)\n\n</details>\n\n# リポジトリ解析とインデックス作成\n\n## 概要\n\nRepoScopeは、GitHubリポジトリを解析し、Wikiスタイルのドキュメントを自動生成するツールです。このツールは、リポジトリの静的解析を行い、シンボルレベルの単位（クラス、関数、メソッド）を抽出し、セマンティック検索のための埋め込みを構築します。また、コードベースの構造化されたナレッジグラフを生成し、機械可読な中間表現を作成します。\n\n## 主な機能\n\n### リポジトリ解析\n\n- **静的解析**: Python、JavaScript/TypeScript、Go、Rustなどのソースファイルを読み込み、シンボルレベルの単位を抽出します。\n- **埋め込みの生成**: セマンティック検索のための埋め込みを構築します。\n- **ナレッジグラフの生成**: コードベースの構造化されたナレッジグラフを生成します。\n- **中間表現の生成**: 機械可読な中間表現を作成します。\n\n### インデックス作成\n\n- **ドキュメントの読み込み**: ディレクトリ内のすべてのドキュメントを再帰的に読み込みます。\n- **データ変換パイプライン**: テキストを分割し、埋め込みを生成するためのデータ変換パイプラインを作成します。\n- **ローカルデータベースへの保存**: 変換されたドキュメントをローカルデータベースに保存します。\n\n## コード構造\n\n### 関数とクラス\n\n#### `count_tokens`\n\n```python\ndef count_tokens(text: str) -> int:\n    \"\"\"\n    テキスト文字列内のトークン数をカウントします。\n    \"\"\"\n```\n\n#### `download_repo`\n\n```python\ndef download_repo(repo_url: str, local_path: str, repo_type: str = None, access_token: str = None) -> str:\n    \"\"\"\n    Gitリポジトリを指定されたローカルパスにダウンロードします。\n    \"\"\"\n```\n\n#### `read_all_documents`\n\n```python\ndef read_all_documents(path: str, embedder_type: str = None, ...) -> list:\n    \"\"\"\n    ディレクトリ内のすべてのドキュメントを再帰的に読み込みます。\n    \"\"\"\n```\n\n#### `prepare_data_pipeline`\n\n```python\ndef prepare_data_pipeline(embedder_type: str = None, ...) -> adal.Sequential:\n    \"\"\"\n    データ変換パイプラインを作成して返します。\n    \"\"\"\n```\n\n#### `transform_documents_and_save_to_db`\n\n```python\ndef transform_documents_and_save_to_db(documents: List[Document], db_path: str, ...) -> LocalDB:\n    \"\"\"\n    ドキュメントのリストを変換し、ローカルデータベースに保存します。\n    \"\"\"\n```\n\n### クラス\n\n#### `DatabaseManager`\n\n```python\nclass DatabaseManager:\n    \"\"\"\n    LocalDBインスタンスの作成、読み込み、変換、および永続化を管理します。\n    \"\"\"\n```\n\n### シーケンス図\n\n```mermaid\nsequenceDiagram\n    participant User\n    participant RepoScope\n    participant GitRepo\n    participant LocalDB\n\n    User->>RepoScope: リポジトリURLを入力\n    RepoScope->>GitRepo: リポジトリをクローン\n    GitRepo-->>RepoScope: リポジトリデータ\n    RepoScope->>LocalDB: ドキュメントを読み込み、変換し、保存\n    LocalDB-->>RepoScope: 保存完了\n    RepoScope-->>User: インデックス作成完了\n```\n\n## 使用方法\n\n1. **依存関係のインストール**\n\n   ```bash\n   pip install -r requirements.txt\n   ```\n\n2. **環境変数の設定**\n\n   `.env`ファイルを作成し、APIキーを設定します。\n\n3. **サーバーの起動**\n\n   ```bash\n   python -m api.main\n   ```\n\n4. **Webインターフェースの利用**\n\n   ブラウザで `http://localhost:8001` にアクセスし、インタラクティブなWebインターフェースを利用します。",
+        "filePaths": [
+          "README.md",
+          "api/data_pipeline.py"
+        ],
+        "importance": "medium",
+        "relatedPages": [
+          "page-2",
+          "page-6"
+        ]
+      },
+      {
+        "id": "page-5",
+        "title": "クイックスタートガイド",
+        "content": "<details>\n<summary>使用したファイル一覧</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n- [USAGE.md](https://github.com/QHCeng/RepoScope/blob/main/USAGE.md)\n- [requirements.txt](https://github.com/QHCeng/RepoScope/blob/main/requirements.txt)\n\n</details>\n\n# クイックスタートガイド\n\n## はじめに\n\nRepoScopeは、GitHubリポジトリをインテリジェントに探索し、構造化されたWikiスタイルのドキュメントを自動生成するツールです。また、リポジトリのソースコードに基づいた自然言語での会話を可能にします。以下の手順に従って、RepoScopeを迅速にセットアップし、使用を開始することができます。\n\n## 必要条件\n\n- Python 3.9以上\n- Git\n- API Key（OpenAIまたはGoogle）\n\n## 環境設定\n\n### 1. 依存関係のインストール\n\n以下のコマンドを実行して、必要な依存関係をインストールします。\n\n```bash\npip install -r requirements.txt\n```\n\nまたは、以下の手順でconda環境を使用することをお勧めします（特にfaissを使用する場合）。\n\n```bash\n# プロジェクトディレクトリに移動\ncd /Users/kevin/Desktop/COMS6998/RepoScope-main\n\n# conda環境を作成\nconda create -n reposcope python=3.9 -y\nconda activate reposcope\n\n# 依存関係のインストール\npip install fastapi uvicorn python-dotenv adalflow transformers tiktoken requests\nconda install -c conda-forge faiss-cpu -y\n```\n\n### 2. API Keyの設定\n\nプロジェクトのルートディレクトリに`.env`ファイルを作成し、API Keyを設定します。\n\n```bash\ntouch .env\n```\n\n`.env`ファイルに以下を追加します。\n\n```env\nOPENAI_API_KEY=your_openai_api_key_here\nGOOGLE_API_KEY=your_google_api_key_here\nPORT=8001\n```\n\nAPI Keyの取得方法:\n- OpenAI: [OpenAI API Keys](https://platform.openai.com/api-keys)\n- Google: [Google API Keys](https://makersuite.google.com/app/apikey)\n\n## サーバーの起動\n\n以下のコマンドでバックエンドサービスを起動します。\n\n```bash\npython -m api.main\n```\n\nサービスは`http://localhost:8001`で起動します。\n\n## フロントエンドの使用\n\n### フロントエンドの起動\n\nバックエンドサービスを起動した後、以下の方法でフロントエンドを開くことができます。\n\n#### 方法 1: HTMLファイルを直接開く（推奨）\n\n1. プロジェクトのルートディレクトリで`index.html`ファイルを見つけます。\n2. ブラウザでそのファイルを開きます（ダブルクリックまたはブラウザで開く）。\n3. フロントエンドは自動的に`http://localhost:8001`のAPIサービスに接続します。\n\n#### 方法 2: ローカルサーバーを介してアクセス\n\n```bash\n# プロジェクトのルートディレクトリで実行\npython -m http.server 8080\n# その後、http://localhost:8080/index.htmlにアクセス\n```\n\n### 使用手順\n\n1. **リポジトリの設定**：\n   - 左側のサイドバーにリポジトリURLを入力（例: `https://github.com/owner/repo`）\n   - リポジトリタイプを選択（GitHub/GitLab/Bitbucket）\n   - （オプション）アクセス令牌を入力（プライベートリポジトリが必要な場合）\n\n2. **モデルの選択**：\n   - AIモデルプロバイダーを選択（OpenAI/Google）\n   - 特定のモデルを選択（例: gpt-4o, gemini-2.0-flash-exp）\n   - 会話言語を選択（日本語/Englishなど）\n\n3. **会話を開始**：\n   - \"+ New Chat\"をクリックして新しい会話を作成\n   - 入力ボックスに質問を入力\n   - SendをクリックまたはEnterキーを押して送信\n   - AIの応答を待つ（初回のクエリはリポジトリの処理に数分かかる場合があります）\n\n4. **会話の管理**：\n   - チャット履歴で異なる会話に切り替え\n   - 不要な会話を削除\n   - すべてのチャット履歴はブラウザのローカルストレージに自動保存\n\n## 注意事項\n\n- **初回クエリは遅い**：初回クエリ時には、システムがリポジトリをダウンロードして処理するため、数分かかる場合があります。\n- **ポートの変更**：ポートを変更した場合、`index.html`内の`API_BASE`変数を変更する必要があります。\n- **プライベートリポジトリ**：GitHub Personal Access Tokenを\"Access Token\"フィールドに入力する必要があります。\n\n## 関連リンク\n\n- APIドキュメント: [http://localhost:8001/docs](http://localhost:8001/docs)\n- ヘルスチェック: [http://localhost:8001/health](http://localhost:8001/health)",
+        "filePaths": [
+          "README.md",
+          "USAGE.md",
+          "requirements.txt"
+        ],
+        "importance": "high",
+        "relatedPages": [
+          "page-3",
+          "page-7"
+        ]
+      },
+      {
+        "id": "page-6",
+        "title": "アーキテクチャと依存関係",
+        "content": "<details>\n<summary>使用されたファイル一覧</summary>\n\n- [api/config.py](https://github.com/QHCeng/RepoScope/blob/main/api/config.py)\n- [api/logging_config.py](https://github.com/QHCeng/RepoScope/blob/main/api/logging_config.py)\n\n</details>\n\n# アーキテクチャと依存関係\n\n## 概要\n\nこのドキュメントでは、提供されたPythonコードに基づくアーキテクチャと依存関係について説明します。コードは主に設定の読み込み、環境変数の管理、ロギングの設定に関するものです。\n\n## モジュールとクラス\n\n### api/config.py\n\nこのファイルは、設定の読み込みと環境変数の管理を行います。\n\n#### クラス\n\n- **OpenAIClient**: `api.openai_client`からインポートされるクラス。具体的な実装は提供されていません。\n\n#### 関数\n\n- `replace_env_placeholders(config)`: 設定内の環境変数プレースホルダーを実際の環境変数の値に置き換えます。\n- `load_json_config(filename)`: 指定されたJSONファイルから設定を読み込みます。\n- `load_generator_config()`: ジェネレーターモデルの設定を読み込みます。\n- `load_embedder_config()`: エンベッダーの設定を読み込みます。\n- `get_embedder_config()`: 現在のエンベッダー設定を取得します。\n- `is_ollama_embedder()`: 現在のエンベッダーがOllamaClientを使用しているかをチェックします。\n- `is_google_embedder()`: 現在のエンベッダーがGoogleEmbedderClientを使用しているかをチェックします。\n- `get_embedder_type()`: 現在のエンベッダータイプを取得します。\n- `load_repo_config()`: リポジトリとファイルフィルターの設定を読み込みます。\n- `load_lang_config()`: 言語設定を読み込みます。\n- `get_model_config(provider, model)`: 指定されたプロバイダーとモデルの設定を取得します。\n\n### api/logging_config.py\n\nこのファイルは、アプリケーションのロギング設定を行います。\n\n#### クラス\n\n- **IgnoreLogChangeDetectedFilter**: 特定のログメッセージをフィルタリングするためのクラス。\n\n#### 関数\n\n- `setup_logging(format)`: アプリケーションのロギングを設定します。ログのローテーションをサポートします。\n\n## 環境変数\n\n以下の環境変数が使用されています：\n\n- `OPENAI_API_KEY`: OpenAIのAPIキー。\n- `DEEPWIKI_AUTH_MODE`: Wikiの認証モード。\n- `DEEPWIKI_AUTH_CODE`: Wikiの認証コード。\n- `DEEPWIKI_EMBEDDER_TYPE`: エンベッダーのタイプ。\n- `DEEPWIKI_CONFIG_DIR`: 設定ディレクトリ。\n- `LOG_LEVEL`: ログレベル。\n- `LOG_FILE_PATH`: ログファイルのパス。\n- `LOG_MAX_SIZE`: ログファイルの最大サイズ（MB）。\n- `LOG_BACKUP_COUNT`: ログのバックアップファイル数。\n\n## デフォルト設定\n\n### エンベッダー設定\n\n| 設定項目       | デフォルト値         |\n|----------------|----------------------|\n| client_class   | OpenAIClient         |\n| model_client   | OpenAIClient         |\n| model_kwargs   | {\"model\": \"text-embedding-3-small\"} |\n| batch_size     | 100                  |\n\n### ロギング設定\n\n| 設定項目       | デフォルト値         |\n|----------------|----------------------|\n| LOG_LEVEL      | INFO                 |\n| LOG_FILE_PATH  | logs/application.log |\n| LOG_MAX_SIZE   | 10MB                 |\n| LOG_BACKUP_COUNT | 5                  |\n\n## Mermaidダイアグラム\n\n### 設定の読み込みフロー\n\n```mermaid\ngraph TD;\n    A[Start] --> B{CONFIG_DIRが設定されているか?};\n    B -- Yes --> C[指定されたディレクトリから設定を読み込む];\n    B -- No --> D[デフォルトディレクトリから設定を読み込む];\n    C --> E[設定を返す];\n    D --> E[設定を返す];\n```\n\n### ロギング設定フロー\n\n```mermaid\nsequenceDiagram\n    participant User\n    participant System\n    User->>System: setup_logging()を呼び出す\n    System->>System: ログディレクトリを確認\n    System->>System: ログレベルを設定\n    System->>System: ログファイルパスを設定\n    System->>System: ログファイルのローテーションを設定\n    System->>User: ロギング設定完了\n```\n\nこのドキュメントは、提供されたコードに基づいており、外部の情報を含んでいません。",
+        "filePaths": [
+          "api/config.py",
+          "api/logging_config.py"
+        ],
+        "importance": "medium",
+        "relatedPages": [
+          "page-4",
+          "page-8"
+        ]
+      },
+      {
+        "id": "page-7",
+        "title": "環境設定とサーバー起動",
+        "content": "<details>\n<summary>使用ファイル一覧</summary>\n\n- [README.md](https://github.com/QHCeng/RepoScope/blob/main/README.md)\n- [api/main.py](https://github.com/QHCeng/RepoScope/blob/main/api/main.py)\n\n</details>\n\n# 環境設定とサーバー起動\n\n## 環境設定\n\nRepoScopeを実行するためには、いくつかの環境設定が必要です。以下の手順に従って設定を行ってください。\n\n### 1. 依存関係のインストール\n\n以下のコマンドを使用して、必要なPythonパッケージをインストールします。\n\n```bash\npip install -r requirements.txt\n```\n\n### 2. 環境変数の設定\n\n`.env`ファイルを作成し、以下の環境変数を設定します。\n\n```env\nOPENAI_API_KEY=your_openai_api_key\nGOOGLE_API_KEY=your_google_api_key\nPORT=8001\n```\n\n`OPENAI_API_KEY`は必須であり、設定されていない場合は機能が制限される可能性があります。\n\n## サーバー起動\n\nサーバーを起動するには、以下の手順に従います。\n\n### 1. サーバーの開始\n\n以下のコマンドを使用して、サーバーを起動します。\n\n```bash\npython -m api.main\n```\n\n### 2. ウェブインターフェースのアクセス\n\nブラウザで以下のURLにアクセスして、インタラクティブなウェブインターフェースを利用します。\n\n```\nhttp://localhost:8001\n```\n\nウェブインターフェースでは以下の機能が提供されます：\n- モダンで直感的なUI\n- コードベースとのリアルタイムチャット\n- プロジェクト履歴と管理\n- モデルと言語の設定\n- 包括的な分析のためのディープリサーチモード\n\n## サーバー構成\n\n`api/main.py`ファイルでは、サーバーの起動に関する詳細な設定が行われています。\n\n### ロギングの設定\n\n```python\nfrom api.logging_config import setup_logging\n\n# ロギングの設定\nsetup_logging()\nlogger = logging.getLogger(__name__)\n```\n\n### 開発環境でのファイル監視\n\n開発環境では、`watchfiles`を使用してファイルの変更を監視します。`logs`ディレクトリは監視対象から除外されます。\n\n```python\nif is_development:\n    import watchfiles\n\n    def patched_watch(*args, **kwargs):\n        # apiディレクトリのみを監視し、logsサブディレクトリを除外\n        api_paths = [current_dir]\n        for item in os.listdir(current_dir):\n            item_path = os.path.join(current_dir, item)\n            if os.path.isdir(item_path) and item != \"logs\":\n                api_paths.append(item_path)\n\n        return original_watch(*api_paths, **kwargs)\n\n    watchfiles.watch = patched_watch\n```\n\n### サーバーの起動\n\n`uvicorn`を使用してFastAPIアプリケーションを起動します。\n\n```python\nif __name__ == \"__main__\":\n    port = int(os.environ.get(\"PORT\", 8001))\n    from api.api import app\n\n    logger.info(f\"Starting Streaming API on port {port}\")\n\n    uvicorn.run(\n        \"api.api:app\",\n        host=\"0.0.0.0\",\n        port=port,\n        reload=is_development,\n        reload_excludes=[\"**/logs/*\", \"**/__pycache__/*\", \"**/*.pyc\"] if is_development else None,\n    )\n```\n\nこの設定により、開発環境ではコードの変更を検知して自動的にサーバーが再起動されます。",
+        "filePaths": [
+          "README.md",
+          "api/main.py"
+        ],
+        "importance": "medium",
+        "relatedPages": [
+          "page-5"
+        ]
+      },
+      {
+        "id": "page-8",
+        "title": "トレーニングスクリプト",
+        "content": "<details>\n<summary>使用したファイル一覧</summary>\n\n- [train/train_lora.py](https://github.com/QHCeng/RepoScope/blob/main/train/train_lora.py)\n- [train/train_rlhf.py](https://github.com/QHCeng/RepoScope/blob/main/train/train_rlhf.py)\n\n</details>\n\n# トレーニングスクリプト\n\nこのページでは、提供されたPythonスクリプトに基づいて、トレーニングスクリプトの詳細を説明します。\n\n## 概要\n\nこのリポジトリには、LoRA（Low-Rank Adaptation）とDPO（Direct Preference Optimization）を用いたトレーニングスクリプトが含まれています。これらのスクリプトは、Mistral-7Bモデルを用いて、コードリポジトリに特化したウィキページ生成を行うためのものです。\n\n## ファイル構成\n\n### train/train_lora.py\n\nこのスクリプトは、LoRAを用いたトレーニングを行います。\n\n#### クラスとデータ構造\n\n- `TrainConfig`: トレーニング設定を保持するデータクラス。\n\n#### 関数\n\n- `build_chat_prompt(example: Dict) -> str`: 入力データからチャットプロンプトを生成します。\n\n#### 主な処理フロー\n\n```mermaid\nsequenceDiagram\n    participant U as ユーザー\n    participant S as スクリプト\n    U->>S: main()を実行\n    S->>S: データセットをロード\n    S->>S: トークナイザーをロード\n    S->>S: モデルをロード\n    S->>S: LoRAを設定\n    S->>S: トレーナーを初期化\n    S->>S: トレーニング開始\n    S->>S: モデルを保存\n```\n\n### train/train_rlhf.py\n\nこのスクリプトは、DPOを用いたトレーニングを行います。\n\n#### クラスとデータ構造\n\n- `DPOConfig`: DPOトレーニング設定を保持するデータクラス。\n\n#### 関数\n\n- `build_dpo_example(example: Dict) -> Dict`: 入力データからDPO用の例を生成します。\n\n#### 主な処理フロー\n\n```mermaid\nsequenceDiagram\n    participant U as ユーザー\n    participant S as スクリプト\n    U->>S: main()を実行\n    S->>S: DPOデータセットをロード\n    S->>S: トークナイザーをロード\n    S->>S: ポリシーモデルをロード\n    S->>S: 参照モデルをロード\n    S->>S: トレーニング引数を準備\n    S->>S: DPOトレーナーを初期化\n    S->>S: トレーニング開始\n    S->>S: モデルを保存\n```\n\n## 設定\n\n### TrainConfig (train/train_lora.py)\n\n| パラメータ名                   | 説明                                   |\n|-------------------------------|----------------------------------------|\n| model_name                    | 使用するモデルの名前                   |\n| train_file                    | トレーニングデータファイル             |\n| val_file                      | 検証データファイル（オプション）       |\n| output_dir                    | 出力ディレクトリ                       |\n| max_seq_length                | 最大シーケンス長                       |\n| micro_batch_size              | マイクロバッチサイズ                   |\n| gradient_accumulation_steps   | 勾配蓄積ステップ数                     |\n| num_train_epochs              | エポック数                             |\n| learning_rate                 | 学習率                                 |\n| weight_decay                  | 重み減衰                               |\n| warmup_ratio                  | ウォームアップ比率                     |\n| lora_r                        | LoRAのランク                           |\n| lora_alpha                    | LoRAのアルファ値                       |\n| lora_dropout                  | LoRAのドロップアウト率                 |\n| lora_target_modules           | LoRAのターゲットモジュール             |\n| use_4bit                      | 4bit量子化を使用するか                 |\n\n### DPOConfig (train/train_rlhf.py)\n\n| パラメータ名                   | 説明                                   |\n|-------------------------------|----------------------------------------|\n| model_name_or_path            | 使用するモデルの名前またはパス         |\n| ref_model_name_or_path        | 参照モデルの名前またはパス             |\n| train_file                    | トレーニングデータファイル             |\n| val_file                      | 検証データファイル（オプション）       |\n| output_dir                    | 出力ディレクトリ                       |\n| max_prompt_length             | 最大プロンプト長                       |\n| max_target_length             | 最大ターゲット長                       |\n| use_4bit                      | 4bit量子化を使用するか                 |\n| per_device_train_batch_size   | デバイスごとのトレインバッチサイズ     |\n| per_device_eval_batch_size    | デバイスごとの評価バッチサイズ         |\n| gradient_accumulation_steps   | 勾配蓄積ステップ数                     |\n| num_train_epochs              | エポック数                             |\n| learning_rate                 | 学習率                                 |\n| warmup_ratio                  | ウォームアップ比率                     |\n| weight_decay                  | 重み減衰                               |\n| logging_steps                 | ロギングステップ数                     |\n| save_strategy                 | 保存戦略                               |\n| eval_strategy                 | 評価戦略                               |\n| bf16                          | bf16を使用するか                       |\n| seed                          | シード値                               |\n| beta                          | DPOのベータ値                          |\n\n## まとめ\n\nこのリポジトリのスクリプトは、LoRAとDPOを用いたトレーニングを行うためのものであり、Mistral-7Bモデルを用いてコードリポジトリに特化したウィキページを生成することを目的としています。各スクリプトは、トレーニングのための詳細な設定と処理フローを提供しています。",
+        "filePaths": [
+          "train/train_lora.py",
+          "train/train_rlhf.py"
+        ],
+        "importance": "low",
+        "relatedPages": [
+          "page-6"
+        ]
+      }
+    ],
+    "sections": [],
+    "root_sections": []
+  }
+}
